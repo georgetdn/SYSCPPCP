@@ -1,5 +1,5 @@
 # SYSCPPCP #
-## 'Simple Yet Sophisticated C++ Class Persistence' or SYSCPPCP ##  
+## Simple Yet Sophisticated C++ Class Persistence or SYSCPPCP ##  
 Store C++ class data in a file and manipulate it programmatically or using SmallSQL(included)  
 ## Requirements:
 Windows 10, 11 and Visual Studio Community 2022 (64-bit) - Current Version 17.11.5  (VS Code is not supported)
