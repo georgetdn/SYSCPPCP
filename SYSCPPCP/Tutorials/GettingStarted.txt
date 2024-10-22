@@ -1,0 +1,89 @@
+Getting started
+Requirements:
+Windows 10, 11 and Visual Studio Community 2022 (64-bit) - Current Version 17.11.5
+
+Here is a check list on how to get started:
+•	Expand syscppcp.zip
+•	Open a command prompt or power shell window
+•	Change the directory to SYSCPPCP 
+•	Execute build.bat (./build in Power Shell)
+•	The build will take about five minutes
+This process will build a framework based on the sample templates.
+When you develop your application you will create a set of templates defining the classes in your application, build the framework and add code specific to your application.  More on this later.
+
+The best way to familiarize with the framework is to execute the sample applications.
+In Windows Explorer go to SYSCPPCP\SYSCPPCPtest\QuickStart and start QuickStart.vcxproj
+Step through the code in debug mode.  You should be able to get an understanding of what actions you can perform
+
+Next,
+Open a command prompt or power shell window and go to SYSCPPCP\SmallSQL\releae and type  smallsql ../../syscppcp.dat (./smallsql ../../syscppcp.dat for PS)
+You should get a SmallSQL prompt
+Type cls to clean the screen
+Type SmallSQL> select classes from dual
+    Classes(Tables)
+    ===============
+    Cat
+    Child
+    Customer
+    Dog
+    Family
+    Invoice
+    Item
+    Person
+This will list the classes created during build based on the sample templates.  For each class a header, source and project file is created and a static library is build
+Type SmallSQL> desc Customer
+Enumerations
+===========
+  enum Type
+   {
+    Retail,
+    WholeSale,
+    OneTime
+   };
+
+Structures
+========
+struct Name
+{
+    char First[20];
+    char Last [20];
+};
+Variables(columns)
+==================
+   int ID;
+   Name name;
+   char Address1 [41];
+   char Address2 [21];
+   char City  [21];
+   char State  [3];
+   char Zip [6];
+   Type type ;
+You will get the data members of the class - Variables(columns) - and an enumeration and structure declarations used to declare the variables type and name.
+Try
+SmallSQL> select * from Cat
+You will get a listing of all records of type Cat stored (serialized) to the database.
+Try
+SmallSQL> select name.First, name.Last from customer
+Syntax Error: Table 'customer' does not exist.
+You get an error because class (table) names and variable(columns) names are case sensitive.
+The correct statement is  
+select name.First, name.Last from Customer
+Notice that the column names are variables as you would use them in a program.  
+name is declared as a structure Name {
+                                      char  First[20; 
+                                     char Last [20];
+                                    };
+You can also try 
+select name.First, name.Last from Customer where State = NY and City = "New York"
+Notice that only strings containing spaces need to be enclosed in quotes.  For  numbers and enumerations no quotes ar transformations are needed
+A few more rules, 
+•	Only one class(table) can be used in a query
+•	Maximum of five where clauses.
+•	Except of arrays of char, no arrays can be used in a query
+•	For enumerations you have to use the item name not the associated integer value
+•	You are not alowed to change the classes variables declarations
+Note: In your applications, as long as you don't change the generated code, you can declare other variables and functions.  The newly declared variables will not be stored in the database.
+More examples
+SmallSQL> update Customer set name.First = "Milton",  name.Last = "Gimbles" where ID = 4597
+SmallSQL> delete from Customer where type = OneTime
+To exit type bye or exit
