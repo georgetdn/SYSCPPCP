@@ -132,7 +132,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>RecordOne.lib;RecordTwo.lib;RecordThree.lib;SYSCPPCP.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Item.lib;customer.lib;Person.lib;Invoice.lib;Family.lib;Dog.lib;Child.lib;Cat.lib;SYSCPPCP.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../SYSCPPCPlibs/Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
