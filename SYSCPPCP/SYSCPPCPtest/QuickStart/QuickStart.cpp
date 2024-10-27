@@ -122,5 +122,31 @@ int main() {
 	rec.Delete();
 	std::cout << "Try to updating an already deleted record" << std::endl;
 	rec.Update();
+
+	//Storring a std::string in the database
+	std::string customerAddress = "555 Fifth Ave";
+	Customer rec2;
+	//Initialize the data members
+	rec2.data.ID = 2345;
+	INIT_STR(rec2.data.name.First, "Michael")
+	INIT_STR(rec2.data.name.Last, "Serkins")
+	INIT_STR(rec2.data.Address1, customerAddress.c_str())
+	INIT_STR(rec2.data.Address2, "Apt 114")
+	INIT_STR(rec2.data.City, "New York")
+	INIT_STR(rec2.data.State, "NY")
+	INIT_STR(rec2.data.Zip, "10009")
+	rec2.Insert();
+	// retreive the record and initialize the string
+	Customer rec3;
+	rec3.IDKey.value = "2345";
+	if (rec3.Seek(&rec3.IDKey, nullptr) == OpResult::True)
+	{
+		std::cout << "Seek function returned a record " << std::endl;
+		rec3.Dump();   // to see the result
+	}
+	else
+		std::cout << "Record not found." << std::endl;
+	// Rec2 and Rec3 point to the same record in the database
+	customerAddress = rec3.data.Address1;
 	return 0;
 }
