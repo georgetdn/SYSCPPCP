@@ -122,7 +122,7 @@ int main() {
 	rec.Delete();
 	std::cout << "Try to updating an already deleted record" << std::endl;
 	rec.Update();
-
+        ////////////////////////////////////////
 	//Storring a std::string in the database
 	std::string customerAddress = "555 Fifth Ave";
 	Customer rec2;
@@ -147,6 +147,6 @@ int main() {
 	else
 		std::cout << "Record not found." << std::endl;
 	// Rec2 and Rec3 point to the same record in the database
-	customerAddress = rec3.data.Address1;
+	customerAddress = rec3.data.Address1; // continue using Address1 as an stdL::string
 	return 0;
 }
