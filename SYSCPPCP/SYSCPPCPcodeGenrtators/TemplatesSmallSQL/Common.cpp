@@ -205,7 +205,24 @@ void InitializeDesc(std::vector<std::vector<std::string>>& vecOfDesc)
 std::string LoadHelp(void )
 {
     return
-        "Can I use NULL\n how do I use empty columo in where   0 from numbers and enums, \" \" from strings ";
+        "Only one class(table) can be used in a query\n"
+        "Maximum of five where clauses.\n"
+        "Except for arrays of char, no arrays can be used in a query\n"
+        "For enumerations, you have to use the item name, not the associated integer value\n"
+        "You are not allowed to change the class variables declarations\n"
+        "Names of classes(tables) and variables(columns) are case-sensitive\n"
+        "No functions are supported in queries\n"
+        "Queries :\n"
+        "cls - clear the screen \n"
+        "select dbname from dual\n"
+        "select date from dual\n"
+        "select classes from dual - lists of classes in the database\n"
+        "desc <class name> -lists class declatations\n"
+        "SELECT .....\n"
+        "INSERT ....\n"
+        "UPDATE ....\n"
+        "DELETE ...\n"
+        "BYE, EXIT, QUIT\n";
 
 }
 // Function to check if the command is valid and handle basic syntax checking

@@ -128,10 +128,6 @@ int main(int argc, char* argv[]) {
 	system(cmmandLn.c_str());
 	cmmandLn = "msbuild ../../SYSCPPCPvcxproj/SmallSQL.vcxproj /p:Configuration=Release /p:Platform=x64";
 	system(cmmandLn.c_str());
-/*	cmmandLn = "\"..\\..\\SmallSQL\\debug\\SmallSQL.exe\"  ..\\structure.dat";
-	system(cmmandLn.c_str());
-	cmmandLn = "\"..\\..\\SmallSQL\\debug\\SmallSQL.exe\"  ..\\structure.dat";
-	system(cmmandLn.c_str());
-*/
+
 	return 0;
 }
