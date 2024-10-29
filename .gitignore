@@ -13,7 +13,11 @@ x64/
 x86/
 build/
 cmake-build-*/
-
+SmallSQL/
+SmallSQLSource/
+SmallSQLheaders/
+SYSCPPCPSource/
+ 
 ## Ignore files ##
 ##################
 *.obj
@@ -33,4 +37,10 @@ cmake-build-*/
 *.sln.docstates
 *.VC.db
 *.VC.opendb
-
+Cat.h
+Child.h
+Customer.h
+Dog.h
+Family.h
+Invoice.h
+Item.h
