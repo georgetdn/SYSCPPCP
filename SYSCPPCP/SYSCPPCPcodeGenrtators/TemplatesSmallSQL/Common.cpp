@@ -206,6 +206,7 @@ std::string LoadHelp(void )
 {
     return
         "Only one class(table) can be used in a query\n"
+        "For empty string or character variables (columns) use \" \""
         "Maximum of five where clauses.\n"
         "Except for arrays of char, no arrays can be used in a query\n"
         "For enumerations, you have to use the item name, not the associated integer value\n"
