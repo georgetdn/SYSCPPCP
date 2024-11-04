@@ -73,7 +73,7 @@ bool ValidateCondition( std::vector<std::string>& tokens, size_t startIndex) {
 
     // Simple check for operator (only '=' for now, can be extended)
     if (!(conditionOperator == "=" || conditionOperator == "!=" || conditionOperator == "<" || conditionOperator == ">"
-                                                       || conditionOperator == "<=" || conditionOperator == ">"))
+                                                       || conditionOperator == "<=" || conditionOperator == ">="))
     {
         std::cerr << "Syntax Error: Unsupported operator in WHERE clause." << std::endl;
         return false;
