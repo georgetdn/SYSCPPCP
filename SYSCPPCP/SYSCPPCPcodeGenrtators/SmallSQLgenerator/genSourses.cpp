@@ -66,7 +66,7 @@ bool genSources(std::vector<std::string>& prefixes)
 						{
 							sz = "sizeof(" + dataType + ")";
 							varcout += "    else if (var == \"" + value + "\")\n"
-								"         std::cout << std::string(sizeof(\"" + value + "\") - 1, ' ') << \" \";\n";
+								"         std::cout << data." + value + " << std::string(sizeof(\"" + value + "\") - 1, ' ') << \" \";\n";
 						}
 					}
 					else if (isNativeType(dataType))
