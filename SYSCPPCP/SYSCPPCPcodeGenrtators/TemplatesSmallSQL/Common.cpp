@@ -224,7 +224,7 @@ std::string LoadHelp(void )
         "desc <class name> -lists class declatations\n"
         "SELECT .....\n"
         "INSERT ....\n"
-        "UPDATE ....\n°
+        "UPDATE ....\n"
         "DELETE ...\n"
         "BYE, EXIT, QUIT\n";
 
