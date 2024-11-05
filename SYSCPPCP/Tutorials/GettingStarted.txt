@@ -16,7 +16,7 @@ In Windows Explorer go to SYSCPPCP\SYSCPPCPtest\QuickStart and start QuickStart.
 Step through the code in debug mode.  You should be able to get an understanding of what actions you can perform
 
 Next,
-Open a command prompt or power shell window and go to SYSCPPCP\SmallSQL\releae and type  smallsql ../../syscppcp.dat (./smallsql ../../syscppcp.dat for PS)
+Open a command prompt or power shell window and go to SmallSQL\release and type  smallsql ../../syscppcp.dat (./smallsql ../../syscppcp.dat for PS)
 You should get a SmallSQL prompt
 Type cls to clean the screen
 Type SmallSQL> select classes from dual
