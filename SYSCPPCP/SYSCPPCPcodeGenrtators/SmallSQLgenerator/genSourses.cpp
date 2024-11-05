@@ -71,9 +71,9 @@ bool genSources(std::vector<std::string>& prefixes)
 					}
 					else if (isNativeType(dataType))
 					{
-						sz = "(sizeof(" + dataType + ") * 2+2)";
+						sz = "(sizeof(" + dataType + ") * 2+4)";
 						varcout += "    else if (var == \"" + value + "\")\n"
-							"         std::cout << std::to_string(data." + value + ") << std::string(" + sz + " < (std::to_string(data." + value + ")).length() ? (std::to_string(data." + value + ")).length() - "+ sz + " : " + sz + " - (std::to_string(data." + value + ")).length(), ' ') << \" \";\n";
+							"         std::cout << std::fixed << std::setprecision(3) << std::right << std::setw(10) << data." + value + " << \" \";\n";
 					}
 					else
 					{ //check if enum and get size
@@ -121,9 +121,9 @@ bool genSources(std::vector<std::string>& prefixes)
 					}
 					else if (isNativeType(dataType))
 					{
-						sz = "(sizeof(data." + value + ") * 2+2)";
 						hedcout += "    else if (var == \"" + value + "\")\n"
-							"         std::cout << (std::string(\"" + value + "\").length() > 10 ? std::string(\"" + value + "\").substr(0, 10) : std::string(\"" + value + "\")) << (std::string(\"" + value + "\").length() > 10 ? \"\" : std::string(10 - std::string(\"" + value + "\").length(), ' ')) << \" \";\n";
+							"         std::cout << std::fixed << std::right << std::setw(10) << \"" + value + "\" << \" \";\n";
+							// "         std::cout << (std::string(\"" + value + "\").length() > 10 ? std::string(\"" + value + "\").substr(0, 10) : std::string(\"" + value + "\")) << (std::string(\"" + value + "\").length() > 10 ? \"\" : std::string(10 - std::string(\"" + value + "\").length(), ' ')) << \" \";\n";
 
 
 					}
@@ -163,9 +163,8 @@ bool genSources(std::vector<std::string>& prefixes)
 					}
 					else if (isNativeType(dataType))
 					{
-						sz = "(sizeof(" + dataType + ") * 2+2)";
 						sepcout += "    else if (var == \"" + value + "\")\n"
-							"          std::cout << std::string(" + sz + " , '-') << \" \";\n";
+							"          std::cout << std::string(10, '-') << \" \";\n";
 					}
 					else
 					{ //check if enum and get size
