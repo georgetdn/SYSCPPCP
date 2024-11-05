@@ -205,23 +205,26 @@ void InitializeDesc(std::vector<std::vector<std::string>>& vecOfDesc)
 std::string LoadHelp(void )
 {
     return
-        "Only one class(table) can be used in a query\n"
-        "For empty string or character variables (columns) use \" \""
-        "Maximum of five where clauses.\n"
-        "Except for arrays of char, no arrays can be used in a query\n"
-        "For enumerations, you have to use the item name, not the associated integer value\n"
-        "You are not allowed to change the class variables declarations\n"
-        "Names of classes(tables) and variables(columns) are case-sensitive\n"
-        "No functions are supported in queries\n"
+        "°Only one class(table) can be used in a query\n"
+        "°ORDER BY, GROUP BY, HAVING, LIMIT, UNION are not supported\n"
+        "°No store procedures\n"
+        "°For empty string or character variables (columns) use \" \""
+        "°Floting point variables are displayed in select with only three decimals\n"
+        "°Maximum of five where clauses.\n"
+        "°Except for arrays of char, no arrays can be used in a query\n"
+        "°For enumerations, you have to use the item name, not the associated integer value\n"
+        "°You are not allowed to change the class variables declarations\n"
+        "°Names of classes(tables) and variables(columns) are case-sensitive\n"
+        "°No functions are supported in queries\n"
         "Queries :\n"
         "cls - clear the screen \n"
         "select dbname from dual\n"
-        "select date from dual\n"
+        "SELECT date FROM dual\n"
         "select classes from dual - lists of classes in the database\n"
         "desc <class name> -lists class declatations\n"
         "SELECT .....\n"
         "INSERT ....\n"
-        "UPDATE ....\n"
+        "UPDATE ....\n°
         "DELETE ...\n"
         "BYE, EXIT, QUIT\n";
 
