@@ -87,33 +87,6 @@ bool ValidateCondition( std::vector<std::string>& tokens, size_t startIndex) {
 
     return true;
 }
-// Formatting the float with three decimal places
-std::string formatFloat(const std::string& val) {
-    float fValue = std::stof(val);  // Convert string to float
-
-    std::ostringstream stream;
-    stream << std::fixed << std::setprecision(3) << fValue;  // Format to 3 decimal places
-
-    return stream.str();  // Return the formatted string
-}
-// Formatting the float with three decimal places
-std::string formatDouble(const std::string& val) {
-    double fValue = std::stod(val);  // Convert string to float
-
-    std::ostringstream stream;
-    stream << std::fixed << std::setprecision(3) << fValue;  // Format to 3 decimal places
-
-    return stream.str();  // Return the formatted string
-}
-// Formatting the float with three decimal places
-std::string formatLongdouble(const std::string& val) {
-    long double fValue = std::stold(val);  // Convert string to float
-
-    std::ostringstream stream;
-    stream << std::fixed << std::setprecision(3) << fValue;  // Format to 3 decimal places
-
-    return stream.str();  // Return the formatted string
-}
 // Function to convert a string to uppercase (for keyword comparison)
 std::string toUpperCase(const std::string& str) {
     std::string upperStr = str;

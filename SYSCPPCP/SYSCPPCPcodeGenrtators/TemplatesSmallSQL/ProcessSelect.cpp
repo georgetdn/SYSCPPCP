@@ -14,9 +14,6 @@ extern Database db;
 
 extern std::vector<std::vector<std::string>> vecOfDesc;
 extern std::vector<std::vector<std::string>> vecOfVecs;
-std::string formatFloat(const std::string& val);
-std::string formatDouble(const std::string& val);
-std::string formatLongDouble(const std::string& val);
 
 bool ProcessSelect(std::vector<std::string>& tokens,
 	std::unordered_map<std::string, std::vector<std::string>>& tables,
