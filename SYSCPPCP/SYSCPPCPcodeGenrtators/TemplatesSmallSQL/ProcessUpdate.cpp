@@ -34,6 +34,25 @@ bool ProcessUpdate(
 		k[idx] = Rec->GetRecordKey(vec[0]);
 		if (k[idx] == nullptr)
 			return false;
+		// validate number length
+		if (k[idx]->typeInfo == typeid(signed short int) ||
+			k[idx]->typeInfo == typeid(signed  int) ||
+			k[idx]->typeInfo == typeid(signed long int) ||
+			k[idx]->typeInfo == typeid(signed long long int) ||
+			k[idx]->typeInfo == typeid(unsigned short int) ||
+			k[idx]->typeInfo == typeid(unsigned  int) ||
+			k[idx]->typeInfo == typeid(unsigned long int) ||
+			k[idx]->typeInfo == typeid(unsigned long long int))
+		{
+
+			if (k[idx]->value.length() > 14)
+			{
+				std::cout << "Number out of range. Max is 14 digits.";
+				return false;
+			}
+		}
+
+
 		k[idx]->comp = vec[1] == "=" ? Comp::Equal : vec[1] == "!=" ? Comp::NotEqual : vec[1] == "<" ? Comp::Smaller :
 			vec[1] == "<=" ? Comp::SmallerEq : vec[1] == ">" ? Comp::Greater : Comp::GreaterEq;
 		k[idx]->value = vec[2];
