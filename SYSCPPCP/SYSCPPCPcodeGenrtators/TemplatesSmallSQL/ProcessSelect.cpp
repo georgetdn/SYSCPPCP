@@ -82,9 +82,9 @@ bool ProcessSelect(std::vector<std::string>& tokens,
 					k[idx]->typeInfo == typeid(unsigned long long int))
 				{
 
-					if (k[idx]->value.length() > 14)
+					if (k[idx]->value.length() > 10)
 					{
-						std::cout << "Number out of range. Max is 14 digits.";
+						std::cout << "Number out of range. Max is 10 digits.";
 						return false;
 					}
 				}

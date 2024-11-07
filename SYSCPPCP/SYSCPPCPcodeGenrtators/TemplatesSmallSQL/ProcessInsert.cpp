@@ -23,7 +23,8 @@ bool ProcessInsert(
 	###ifs
 
 	for (size_t i = 0; i < values.size(); ++i) {
-		Rec->SetValue(columns[i], values[i]);
+		if (!Rec->SetValue(columns[i], values[i]))
+			return false;
 	}
 
 	if (Rec->Insert())

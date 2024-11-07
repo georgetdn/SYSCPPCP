@@ -95,7 +95,7 @@ bool genSources(std::vector<std::string>& prefixes)
 							{
 								sz = std::to_string(i + 1);
 								varcout += "    else if (var == \"" + value + "\")\n"
-									"         std::cout << "+dataType + "Array[data." + value + "] << std::string(" + sz + " -  std::strlen("+dataType + "Array[data." + value + "]), ' ');\n";
+									"         std::cout << " + dataType + "Array[data." + value + "] << std::string(" + sz + " -  std::strlen(" + dataType + "Array[data." + value + "]), ' ');\n";
 								found = false;
 							}
 						}
@@ -123,7 +123,7 @@ bool genSources(std::vector<std::string>& prefixes)
 					{
 						hedcout += "    else if (var == \"" + value + "\")\n"
 							"         std::cout << std::fixed << std::right << std::setw(10) << \"" + value + "\" << \" \";\n";
-							// "         std::cout << (std::string(\"" + value + "\").length() > 10 ? std::string(\"" + value + "\").substr(0, 10) : std::string(\"" + value + "\")) << (std::string(\"" + value + "\").length() > 10 ? \"\" : std::string(10 - std::string(\"" + value + "\").length(), ' ')) << \" \";\n";
+						// "         std::cout << (std::string(\"" + value + "\").length() > 10 ? std::string(\"" + value + "\").substr(0, 10) : std::string(\"" + value + "\")) << (std::string(\"" + value + "\").length() > 10 ? \"\" : std::string(10 - std::string(\"" + value + "\").length(), ' ')) << \" \";\n";
 
 
 					}
@@ -145,9 +145,9 @@ bool genSources(std::vector<std::string>& prefixes)
 							}
 							if (found)
 							{
-								sz = std::to_string(i+1);
+								sz = std::to_string(i + 1);
 								hedcout += "    else if (var == \"" + value + "\")\n"
-									"          std::cout << \""+ value + "\" << std::string(" + sz + " < std::strlen(\"" + value + "\") ? std::strlen(\"" + value + "\") - " + sz + " : " + sz + " - std::strlen(\"" + value + "\"), ' ');\n";
+									"          std::cout << \"" + value + "\" << std::string(" + sz + " < std::strlen(\"" + value + "\") ? std::strlen(\"" + value + "\") - " + sz + " : " + sz + " - std::strlen(\"" + value + "\"), ' ');\n";
 								found = false;
 							}
 						}
@@ -210,19 +210,74 @@ bool genSources(std::vector<std::string>& prefixes)
 					{
 						if (dataType == "float" || dataType == "double" || dataType == "long double")
 						{
+
 							if (dataType == "float") {
-								SetValue += Else + " if (col == \"" + value + "\")\n     data." + value + " = std::stof(val) ;\n";
+								SetValue += Else + " if (col == \"" + value + "\")\n {\n"
+
+									"         std::string integerPart;\n"
+									"         size_t periodPos = val.find('.');\n"
+									"         if (periodPos != std::string::npos) {\n"
+									"             integerPart = val.substr(0, periodPos);\n"
+									"         }\n"
+									"         else\n"
+									"         {\n"
+									"             integerPart = val;\n"
+									"         }\n"
+									"         if (integerPart.length() > 7)\n"
+									"         {\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 7.\" << std::endl;\n"
+									"             return false;\n"
+									"         }\n"
+									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+									"         data." + value + " = std::stof(val) ;\n}\n";
 							}
 							else if (dataType == "double") {
-								SetValue += Else + " if (col == \"" + value + "\")\n     data." + value + " = std::stod(val) ;\n";
+								SetValue += Else + " if (col == \"" + value + "\")\n    {\n"
+									"         std::string integerPart;\n"
+									"         size_t periodPos = val.find('.');\n"
+									"         if (periodPos != std::string::npos) {\n"
+									"             integerPart = val.substr(0, periodPos);\n"
+									"         }\n"
+									"         else\n"
+									"         {\n"
+									"             integerPart = val;\n"
+									"         }\n"
+									"         if (integerPart.length() > 15)\n"
+									"         {\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 15.\" << std::endl;\n"
+									"             return false;\n"
+									"         }\n"
+									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+								   "         data." + value + " = std::stod(val) ;\n   }\n";
 							}
 							else if (dataType == "long double") {
-								SetValue += Else + " if (col == \"" + value + "\")\n     data." + value + " = std::stold(val) ;\n";
+								SetValue += Else + " if (col == \"" + value + "\")\n{\n"
+									"         std::string integerPart;\n"
+									"         size_t periodPos = val.find('.');\n"
+									"         if (periodPos != std::string::npos) {\n"
+									"             integerPart = val.substr(0, periodPos);\n"
+									"         }\n"
+									"         else\n"
+									"         {\n"
+									"             integerPart = val;\n"
+									"         }\n"
+									"         if (integerPart.length() > 15)\n"
+									"         {\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 15.\" << std::endl;\n"
+									"             return false;\n"
+									"         }\n"
+									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+ 								    "         data." + value + " = std::stold(val) ;\n{\n";
 							}
 						}
 						else
 						{
-							SetValue += Else + " if (col == \"" + value + "\")\n     data." + value + " = std::stoi(val);\n";
+							SetValue += Else + " if (col == \"" + value + "\")\n{\n"
+								"    if (val.length() > 10) \n"
+								"    {\n    std::cout << \"Max length of " + value + " is 10 digits\"\n;\n"
+								"           return false;\n"
+								"     }\n"
+								"    data." + value + " = std::stoi(val);\n} \n";
 						}
 						Else = "else";
 					}
@@ -233,7 +288,7 @@ bool genSources(std::vector<std::string>& prefixes)
 						for (const auto& row : enums) {
 							if (row[0] != prefix)
 								continue;
-							if(row[1] != dataType)
+							if (row[1] != dataType)
 								continue;
 							for (const auto& str : row) {
 								if (str == prefix)

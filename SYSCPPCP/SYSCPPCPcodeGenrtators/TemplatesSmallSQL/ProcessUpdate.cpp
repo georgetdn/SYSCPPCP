@@ -45,9 +45,9 @@ bool ProcessUpdate(
 			k[idx]->typeInfo == typeid(unsigned long long int))
 		{
 
-			if (k[idx]->value.length() > 14)
+			if (k[idx]->value.length() > 10)
 			{
-				std::cout << "Number out of range. Max is 14 digits.";
+				std::cout << "Number out of range. Max is 10 digits.";
 				return false;
 			}
 		}
@@ -104,7 +104,8 @@ bool ProcessUpdate(
 		}
 
 		for (size_t i = 0; i < columnValuePair.size(); ++i) {
-			Rec->SetValue(columnValuePair[i][0], columnValuePair[i][1]);
+			if (!Rec->SetValue(columnValuePair[i][0], columnValuePair[i][1]))
+				return false;
 		}
 
 		cnt++;
