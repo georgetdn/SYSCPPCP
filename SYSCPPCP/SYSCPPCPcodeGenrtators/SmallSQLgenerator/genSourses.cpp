@@ -71,7 +71,6 @@ bool genSources(std::vector<std::string>& prefixes)
 					}
 					else if (isNativeType(dataType))
 					{
-						sz = "(sizeof(" + dataType + ") * 2+4)";
 						varcout += "    else if (var == \"" + value + "\")\n"
 							"         std::cout << std::fixed << std::setprecision(3) << std::right << std::setw(10) << data." + value + " << \" \";\n";
 					}
@@ -123,9 +122,6 @@ bool genSources(std::vector<std::string>& prefixes)
 					{
 						hedcout += "    else if (var == \"" + value + "\")\n"
 							"         std::cout << std::fixed << std::right << std::setw(10) << \"" + value + "\" << \" \";\n";
-						// "         std::cout << (std::string(\"" + value + "\").length() > 10 ? std::string(\"" + value + "\").substr(0, 10) : std::string(\"" + value + "\")) << (std::string(\"" + value + "\").length() > 10 ? \"\" : std::string(10 - std::string(\"" + value + "\").length(), ' ')) << \" \";\n";
-
-
 					}
 					else
 					{ //check if enum and get size
@@ -223,9 +219,9 @@ bool genSources(std::vector<std::string>& prefixes)
 									"         {\n"
 									"             integerPart = val;\n"
 									"         }\n"
-									"         if (integerPart.length() > 7)\n"
+									"         if (integerPart.length() > 5)\n"
 									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 7.\" << std::endl;\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 5.\" << std::endl;\n"
 									"             return false;\n"
 									"         }\n"
 									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
@@ -242,9 +238,9 @@ bool genSources(std::vector<std::string>& prefixes)
 									"         {\n"
 									"             integerPart = val;\n"
 									"         }\n"
-									"         if (integerPart.length() > 15)\n"
+									"         if (integerPart.length() > 13)\n"
 									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 15.\" << std::endl;\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 13.\" << std::endl;\n"
 									"             return false;\n"
 									"         }\n"
 									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
@@ -261,9 +257,9 @@ bool genSources(std::vector<std::string>& prefixes)
 									"         {\n"
 									"             integerPart = val;\n"
 									"         }\n"
-									"         if (integerPart.length() > 15)\n"
+									"         if (integerPart.length() > 14)\n"
 									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 15.\" << std::endl;\n"
+									"             std::cout << \"Max value for the integral part of " + value + " is 14.\" << std::endl;\n"
 									"             return false;\n"
 									"         }\n"
 									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
@@ -274,7 +270,7 @@ bool genSources(std::vector<std::string>& prefixes)
 						{
 							SetValue += Else + " if (col == \"" + value + "\")\n{\n"
 								"    if (val.length() > 10) \n"
-								"    {\n    std::cout << \"Max length of " + value + " is 10 digits\"\n;\n"
+								"    {\n    std::cout << \"Max length of " + value + " is 10 digits\" << std::endl;\n"
 								"           return false;\n"
 								"     }\n"
 								"    data." + value + " = std::stoi(val);\n} \n";
