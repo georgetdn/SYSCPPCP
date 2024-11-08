@@ -32,10 +32,6 @@ bool ProcessSelect(std::vector<std::string>& tokens,
 				std::cout << "    " << vecOfDesc[i][0] << std::endl;
 			std::cout << std::endl;
 		}
-		else if (columns[0] == "count()" || columns[0] == "COUNT()")
-		{
-			std::cout << std::endl << "Number of records in the database:" << db.GetCount() << std::endl << std::endl;
-		}
 		else if (columns[0] == "date" || columns[0] == "DATE")
 		{
 			std::cout << std::endl << system("echo %DATE%") << std::endl;

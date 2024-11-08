@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "Welcome to SmalSQL!" << std::endl;
 	std::cout << "Supported commands: DESC, SELECT, INSERT, DELETE, UPDATE, CLS, HELP" << std::endl;
-	std::cout << "'select from dual' supports 'classes', 'count()', 'date', 'dbname' and 'dump' " << std::endl << std::endl;
+	std::cout << "'select from dual' supports 'classes', 'date', 'dbname' and 'dump' " << std::endl << std::endl;
 
 	InitializeVector(vecOfVecs);
 	InitializeDesc(vecOfDesc);

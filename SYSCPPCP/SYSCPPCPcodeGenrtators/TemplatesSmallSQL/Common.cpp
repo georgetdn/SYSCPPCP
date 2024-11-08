@@ -165,8 +165,8 @@ void InitializeVector(std::vector<std::vector<std::string>>& vecOfVecs)
 {
  
 ###InitializeVector
-    vecOfVecs.push_back(std::vector<std::string>{"DUAL", "CLASSES", "COUNT()", "DATE", "DBNAME", "DUMP"});
-    vecOfVecs.push_back(std::vector<std::string>{"dual", "classes", "count()", "date", "dbname", "dump"});
+    vecOfVecs.push_back(std::vector<std::string>{"DUAL", "CLASSES", "DATE", "DBNAME", "DUMP"});
+    vecOfVecs.push_back(std::vector<std::string>{"dual", "classes",  "date", "dbname", "dump"});
 
 }
 void InitializeDesc(std::vector<std::vector<std::string>>& vecOfDesc)
