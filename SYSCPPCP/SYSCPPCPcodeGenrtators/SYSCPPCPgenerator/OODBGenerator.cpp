@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <filesystem> 
 #include <algorithm> 
@@ -45,7 +46,11 @@ int main(int argc, char* argv[])
 	std::string cmmandLn;
 	cmmandLn = "mkdir \"../../SYSCPPCPSource\"";
 	system(cmmandLn.c_str());
+#ifdef  __linux__
+	cmmandLn = "mkdir \"../../SYSCPPCPmake\"";
+#elif _WIN32
 	cmmandLn = "mkdir \"../../SYSCPPCPvcxproj\"";
+#endif
 	system(cmmandLn.c_str());
 
 	std::set<std::string> uniquePrefixes;  // Using set to ensure uniqueness
@@ -89,9 +94,9 @@ int main(int argc, char* argv[])
 		arrayFl.clear();
 		varsFl.clear();
 		structsFl.clear();
-	    headerFl.clear();
-	    sourceFl.clear();
-	    projectFl.clear();
+		headerFl.clear();
+		sourceFl.clear();
+		projectFl.clear();
 
 		loadHeaderTempl();
 		loadSourceTemplate();
@@ -106,10 +111,16 @@ int main(int argc, char* argv[])
 		std::string structs = "../templates/" + recName + "Struct.tmpl";
 		std::string vars = "../templates/" + recName + "Variables.tmpl";
 		std::string header = "../../SYSCPPCPheaders/" + recName + ".h";
-		std::string source = "../../SYSCPPCPsource/" + recName + ".cpp";
+		std::string source = "../../SYSCPPCPSource/" + recName + ".cpp";
+#ifdef __linux__	
+		std::string project = "../../SYSCPPCPmake/makefile_" + recName;
+#elif _WIN32
 		std::string project = "../../SYSCPPCPvcxproj/" + recName + ".vcxproj";
+#else
+		std::cout << "Unknown platform" << std::endl;
+#endif
 		std::string headerEx = "../SYSCPPCPheaders/" + recName + ".h";
-		std::string sourceEx = "../SYSCPPCPsource/" + recName + ".cpp";
+		std::string sourceEx = "../SYSCPPCPSource/" + recName + ".cpp";
 
 		std::cerr << "Templates used to generate the code:" << std::endl;
 		std::ifstream file;
@@ -218,309 +229,333 @@ int main(int argc, char* argv[])
 		std::string display;
 
 		// Create project direcotry
+#ifdef __linux__
+while (projectFl.find("+++ProjectName") != std::string::npos)
+{
+	projectFl.replace(projectFl.find("+++ProjectName"), strlen("+++ProjectName"), recName);
+}
+#elif _WIN32
+projectFl.replace(projectFl.find("+++ProjectName"), strlen("+++ProjectName"), recName);
+projectFl.replace(projectFl.find("+++Header"), strlen("+++Header"), headerEx);
+projectFl.replace(projectFl.find("+++Source"), strlen("+++Source"), sourceEx);
+#else
+std::cout << "Unknown platform" << std::endl;
+#endif
+std::ofstream fileOut(project, std::ios::out | std::ios::trunc);
+// Check if the file was successfully opened
+if (!fileOut) {
+	std::cerr << "Error: Could not open the file for writing." << std::endl;
+	return 1;
+}
+fileOut << projectFl;
+fileOut.close();
 
-		projectFl.replace(projectFl.find("+++ProjectName"), strlen("+++ProjectName"), recName);
-		projectFl.replace(projectFl.find("+++Header"), strlen("+++Header"), headerEx);
-		projectFl.replace(projectFl.find("+++Source"), strlen("+++Source"), sourceEx);
-		std::ofstream fileOut(project, std::ios::out | std::ios::trunc);
-		// Check if the file was successfully opened
-		if (!fileOut) {
-			std::cerr << "Error: Could not open the file for writing." << std::endl;
+while (headerFl.find("+++NewRecord") != std::string::npos)
+headerFl.replace(headerFl.find("+++NewRecord"), strlen("+++NewRecord"), recName);
+while (sourceFl.find("+++NewRecord") != std::string::npos)
+sourceFl.replace(sourceFl.find("+++NewRecord"), strlen("+++NewRecord"), recName);
+
+headerFl.replace(headerFl.find("+++enums"), strlen("+++enums"), "\r\n" + enumsFl + "\r\n");
+headerFl.replace(headerFl.find("+++arrays"), strlen("+++arrays"), "\r\n" + arrayFl + "\r\n");
+headerFl.replace(headerFl.find("+++structures"), strlen("+++structures"), structsFl + "\r\n");
+headerFl.replace(headerFl.find("+++variables"), strlen("+++variables"), "\r\n" + varsFl + "\r\n");
+// recKeys
+while (varsFl.find("\r") != std::string::npos)
+varsFl.replace(varsFl.find("\r"), 1, "");
+while (varsFl.find("\n") != std::string::npos)
+varsFl.replace(varsFl.find("\n"), 1, "");
+while (varsFl.find("\t") != std::string::npos)
+varsFl.replace(varsFl.find("\t"), 1, " ");
+while (varsFl.find("  ") != std::string::npos)
+varsFl.replace(varsFl.find("  "), 2, " ");
+while (varsFl.find(" ;") != std::string::npos)
+varsFl.replace(varsFl.find(" ;"), 2, ";");
+while (varsFl.find(" ]") != std::string::npos)
+varsFl.replace(varsFl.find(" ]"), 2, "]");
+while (varsFl.find(" [") != std::string::npos)
+varsFl.replace(varsFl.find(" ["), 2, "[");
+while (varsFl.find(" Key") != std::string::npos)
+varsFl.replace(varsFl.find(" Key"), 4, "Key");
+if (varsFl.find("const") != std::string::npos)
+{
+	std::cout << "'const' variables are not supported.  Please remove from template" << std::endl;
+	return 1;
+}
+if (varsFl.find("static") != std::string::npos)
+{
+	std::cout << "'static' variables are not supported. Please remove from template" << std::endl;
+	return 1;
+}
+
+std::string token;
+for (int i = 0; i < varsFl.length(); i++)
+{
+	if (i == 0 && varsFl[i] == ' ')
+		continue;
+	if (varsFl[i] == ' ')
+	{
+		if (token.find(";") != std::string::npos ||
+			enumsFl.find(" " + token) != std::string::npos ||
+			structsFl.find(" " + token) != std::string::npos ||
+			token == "char" ||
+			token == "int" ||
+			token == "short" ||
+			token == "signed" ||
+			token == "unsigned" ||
+			token == "long" ||
+			token == "float" ||
+			token == "doble")
+		{
+			token = "";
+			continue;
+		}
+		else
+		{
+			std::cout << "'" << token << "' datatype is not supported. Fix '" << vars << "'" << std::endl;
 			return 1;
 		}
-		fileOut << projectFl;
-		fileOut.close();
+	}
+	token += varsFl[i];
 
-		while (headerFl.find("+++NewRecord") != std::string::npos)
-			headerFl.replace(headerFl.find("+++NewRecord"), strlen("+++NewRecord"), recName);
-		while (sourceFl.find("+++NewRecord") != std::string::npos)
-			sourceFl.replace(sourceFl.find("+++NewRecord"), strlen("+++NewRecord"), recName);
 
-		headerFl.replace(headerFl.find("+++enums"), strlen("+++enums"), "\r\n" + enumsFl + "\r\n");
-		headerFl.replace(headerFl.find("+++arrays"), strlen("+++arrays"), "\r\n" + arrayFl + "\r\n");
+}
+bool flg = false;
+for (int i = 0; i < varsFl.length(); i++)
+{
+	if (flg || varsFl[i] == '[' || varsFl[i] == ']')
+	{
+		if (varsFl[i] == '[')
+			flg = true;
+		if (varsFl[i] == ']')
+			flg = false;
+		varsFl.replace(i, 1, "");
+		i--;
+	}
+}
 
-		headerFl.replace(headerFl.find("+++structures"), strlen("+++structures"), structsFl + "\r\n");
-		headerFl.replace(headerFl.find("+++variables"), strlen("+++variables"), "\r\n" + varsFl + "\r\n");
-		// recKeys
-		while (varsFl.find("\r") != std::string::npos)
-			varsFl.replace(varsFl.find("\r"), 1, "");
-		while (varsFl.find("\n") != std::string::npos)
-			varsFl.replace(varsFl.find("\n"), 1, "");
-		while (varsFl.find("\t") != std::string::npos)
-			varsFl.replace(varsFl.find("\t"), 1, " ");
-		while (varsFl.find("  ") != std::string::npos)
-			varsFl.replace(varsFl.find("  "), 2, " ");
-		while (varsFl.find(" ;") != std::string::npos)
-			varsFl.replace(varsFl.find(" ;"), 2, ";");
-		while (varsFl.find(" ]") != std::string::npos)
-			varsFl.replace(varsFl.find(" ]"), 2, "]");
-		while (varsFl.find(" [") != std::string::npos)
-			varsFl.replace(varsFl.find(" ["), 2, "[");
-		while (varsFl.find(" Key") != std::string::npos)
-			varsFl.replace(varsFl.find(" Key"), 4, "Key");
-		if (varsFl.find("const") != std::string::npos)
+std::istringstream stream(varsFl);
+std::string tmp;
+
+// Split the string based on the delimiter ';'
+while (std::getline(stream, token, ';'))
+{
+	if (token.size() < 3)
+		continue;
+	// Display the extracted token
+	if (!token.empty())
+	{
+		// get var name and type
+		std::string type;
+		std::string var;
+
+		// Find the position of the last space
+		size_t pos = token.rfind(' ');
+
+		// Split the string into two parts
+		type = token.substr(0, pos);        // Left part before the space
+		while (type.find(" ") != std::string::npos)
+			type.replace(type.find(" "), 1, "");
+		var = token.substr(pos + 1);      // Right part after the space
+		if (structsFl.find("struct " + type) != std::string::npos)
 		{
-			std::cout << "'const' variables are not supported.  Please remove from template" << std::endl;
-			return 1;
-		}
-		if (varsFl.find("static") != std::string::npos)
-		{
-			std::cout << "'static' variables are not supported. Please remove from template" << std::endl;
-			return 1;
-		}
 
-		std::string token;
-		for (int i = 0; i < varsFl.length(); i++)
-		{
-			if (i == 0 && varsFl[i] == ' ')
-				continue;
-			if (varsFl[i] == ' ')
-			{
-				if (token.find(";") != std::string::npos ||
-					enumsFl.find(" " + token) != std::string::npos ||
-					structsFl.find(" " + token) != std::string::npos ||
-					token == "char" ||
-					token == "int" ||
-					token == "short" ||
-					token == "signed" ||
-					token == "unsigned" ||
-					token == "long" ||
-					token == "float" ||
-					token == "doble")
-				{
-					token = "";
-					continue;
-				}
-				else
-				{
-					std::cout << "'" << token << "' datatype is not supported. Fix '" << vars << "'" << std::endl;
-					return 1;
-				}
-			}
-			token += varsFl[i];
+			// Struct name to look for
+			std::string structName = "struct " + type;
+			size_t structPos = structsFl.find(structName);
 
+			if (structPos != std::string::npos) {
+				// Find the opening and closing braces for the struct
+				size_t openBracePos = structsFl.find('{', structPos);
+				size_t closeBracePos = structsFl.find('}', openBracePos);
 
-		}
-		bool flg = false;
-		for (int i = 0; i < varsFl.length(); i++)
-		{
-			if (flg || varsFl[i] == '[' || varsFl[i] == ']')
-			{
-				if (varsFl[i] == '[')
-					flg = true;
-				if (varsFl[i] == ']')
-					flg = false;
-				varsFl.replace(i, 1, "");
-				i--;
-			}
-		}
+				if (openBracePos != std::string::npos && closeBracePos != std::string::npos) {
+					// Extract the body of the struct
+					std::string structBody = structsFl.substr(openBracePos + 1, closeBracePos - openBracePos - 1);
 
-		std::istringstream stream(varsFl);
-		std::string tmp;
+					// Split the struct body by lines to extract member variables
+					std::vector<std::string> members;
+					size_t pos = 0;
+					while ((pos = structBody.find(';')) != std::string::npos) {
+						std::string line = structBody.substr(0, pos);
+						structBody.erase(0, pos + 1);
 
-		// Split the string based on the delimiter ';'
-		while (std::getline(stream, token, ';'))
-		{
-			if (token.size() < 3)
-				continue;
-			// Display the extracted token
-			if (!token.empty())
-			{
-				// get var name and type
-				std::string type;
-				std::string var;
+						// Trim whitespace from the line
+						line.erase(0, line.find_first_not_of(" \t\n\r"));
+						line.erase(line.find_last_not_of(" \t\n\r") + 1);
 
-				// Find the position of the last space
-				size_t pos = token.rfind(' ');
-
-				// Split the string into two parts
-				type = token.substr(0, pos);        // Left part before the space
-				while (type.find(" ") != std::string::npos)
-					type.replace(type.find(" "), 1, "");
-				var = token.substr(pos + 1);      // Right part after the space
-				if (structsFl.find("struct " + type) != std::string::npos)
-				{
-
-					// Struct name to look for
-					std::string structName = "struct " + type;
-					size_t structPos = structsFl.find(structName);
-
-					if (structPos != std::string::npos) {
-						// Find the opening and closing braces for the struct
-						size_t openBracePos = structsFl.find('{', structPos);
-						size_t closeBracePos = structsFl.find('}', openBracePos);
-
-						if (openBracePos != std::string::npos && closeBracePos != std::string::npos) {
-							// Extract the body of the struct
-							std::string structBody = structsFl.substr(openBracePos + 1, closeBracePos - openBracePos - 1);
-
-							// Split the struct body by lines to extract member variables
-							std::vector<std::string> members;
-							size_t pos = 0;
-							while ((pos = structBody.find(';')) != std::string::npos) {
-								std::string line = structBody.substr(0, pos);
-								structBody.erase(0, pos + 1);
-
-								// Trim whitespace from the line
-								line.erase(0, line.find_first_not_of(" \t\n\r"));
-								line.erase(line.find_last_not_of(" \t\n\r") + 1);
-
-								// Check if the line declares a char array
-								if (line.find("char") == 0) {
-									// Extract the member name
-									size_t nameStart = line.find(' ', 4); // Find space after "char "
-									if (nameStart != std::string::npos) {
-										std::string memberName = line.substr(nameStart + 1);
-										// Remove array notation if present
-										size_t arrayStart = memberName.find('[');
-										if (arrayStart != std::string::npos) {
-											memberName = memberName.substr(0, arrayStart);
-										}
-										// Trim any extra whitespace
-										memberName.erase(0, memberName.find_first_not_of(" \t\n\r"));
-										memberName.erase(memberName.find_last_not_of(" \t\n\r") + 1);
-
-										// Add to the members list
-										if (!memberName.empty()) {
-											members.push_back(memberName);
-										}
-									}
+						// Check if the line declares a char array
+						if (line.find("char") == 0) {
+							// Extract the member name
+							size_t nameStart = line.find(' ', 4); // Find space after "char "
+							if (nameStart != std::string::npos) {
+								std::string memberName = line.substr(nameStart + 1);
+								// Remove array notation if present
+								size_t arrayStart = memberName.find('[');
+								if (arrayStart != std::string::npos) {
+									memberName = memberName.substr(0, arrayStart);
 								}
-								else
-								{
-									if (line.find("[") != std::string::npos)   // Only arrays of characters are supported
-										continue;
+								// Trim any extra whitespace
+								memberName.erase(0, memberName.find_first_not_of(" \t\n\r"));
+								memberName.erase(memberName.find_last_not_of(" \t\n\r") + 1);
 
-									// Extract the member name
-									size_t nameStart = line.find(' ', 0); // Find space after type
-									if (nameStart != std::string::npos) {
-										std::string memberName = line.substr(nameStart + 1);
-										// Remove array notation if present
-
-										// Trim any extra whitespace
-										memberName.erase(0, memberName.find_first_not_of(" \t\n\r"));
-										memberName.erase(memberName.find_last_not_of(" \t\n\r") + 1);
-
-										// Add to the members list
-										if (!memberName.empty()) {
-											members.push_back(memberName);
-										}
-									}
+								// Add to the members list
+								if (!memberName.empty()) {
+									members.push_back(memberName);
 								}
 							}
+						}
+						else
+						{
+							if (line.find("[") != std::string::npos)   // Only arrays of characters are supported
+								continue;
 
-							// Display the results as "var.memberName"
-							for (const auto& memberName : members) {
-								keys += "recKey ";
-								keys += var;
-								keys += memberName;
-								keys += "Key;\n";
-								keysDef += ", ";
-								keysDef += var;
-								keysDef += memberName;
-								keysDef += "Key";
-								keysDef += "(offsetof(DBData,";
-								keysDef += var;
-								keysDef += ".";
-								keysDef += memberName;
-								keysDef += ") - sizeof(int) - REC_NAME_SIZE, sizeof(data.";
-								keysDef += var;
-								keysDef += ".";
-								keysDef += memberName;
-								keysDef += "), typeid(data.";
-								keysDef += var;
-								keysDef += ".";
-								keysDef += memberName;
-								keysDef += "))\n";
+							// Extract the member name
+							size_t nameStart = line.find(' ', 0); // Find space after type
+							if (nameStart != std::string::npos) {
+								std::string memberName = line.substr(nameStart + 1);
+								// Remove array notation if present
 
+								// Trim any extra whitespace
+								memberName.erase(0, memberName.find_first_not_of(" \t\n\r"));
+								memberName.erase(memberName.find_last_not_of(" \t\n\r") + 1);
+
+								// Add to the members list
+								if (!memberName.empty()) {
+									members.push_back(memberName);
+								}
 							}
 						}
-						else {
-							std::cout << "Struct body not found." << std::endl;
-						}
 					}
-					else {
-						std::cout << "Struct Name not found in the input string." << std::endl;
+
+					// Display the results as "var.memberName"
+					for (const auto& memberName : members) {
+						keys += "recKey ";
+						keys += var;
+						keys += memberName;
+						keys += "Key;\n";
+						keysDef += ", ";
+						keysDef += var;
+						keysDef += memberName;
+						keysDef += "Key";
+						keysDef += "(offsetof(DBData,";
+						keysDef += var;
+						keysDef += ".";
+						keysDef += memberName;
+						keysDef += ") - sizeof(int) - REC_NAME_SIZE, sizeof(data.";
+						keysDef += var;
+						keysDef += ".";
+						keysDef += memberName;
+						keysDef += "), typeid(data.";
+						keysDef += var;
+						keysDef += ".";
+						keysDef += memberName;
+						keysDef += "))\n";
+
 					}
 				}
-				else
-				{
-					keys += "recKey ";
-					keys += var;
-					keys += "Key;\n";
-					keysDef += ", ";
-					keysDef += var;
-					keysDef += "Key";
-					keysDef += "(offsetof(DBData,";
-					keysDef += var;
-					keysDef += ") - sizeof(int) - REC_NAME_SIZE, sizeof(data.";
-					keysDef += var;
-					keysDef += "), typeid(data.";
-					keysDef += var;
-					keysDef += "))\n";
+				else {
+					std::cout << "Struct body not found." << std::endl;
 				}
 			}
+			else {
+				std::cout << "Struct Name not found in the input string." << std::endl;
+			}
 		}
-
-		if (FormatDisplay(display, enumsFl, structsFl, vars) != 0)
-			return 1;
-		sourceFl.replace(sourceFl.find("+++enumMap"), strlen("+++enumMap"), enumMap);
-		sourceFl.replace(sourceFl.find("+++Display"), strlen("+++Display"), display);
-		headerFl.replace(headerFl.find("+++recKeys"), strlen("+++recKeys"), keys);
-		sourceFl.replace(sourceFl.find("+++recKeysDef"), strlen("+++recKeysDef"), keysDef);
-		sourceFl.replace(sourceFl.find("+++recKeysDef"), strlen("+++recKeysDef"), keysDef);
-
-		// Open the file in overwrite mode (default is std::ios::out, 
-		// which includes std::ios::trunc)
-		std::ofstream file6(header, std::ios::out | std::ios::trunc);
-		// Check if the file was successfully opened
-		if (!file6) {
-			std::cerr << "Error: Could not open the file for writing." << std::endl;
-			return 1;
+		else
+		{
+			keys += "recKey ";
+			keys += var;
+			keys += "Key;\n";
+			keysDef += ", ";
+			keysDef += var;
+			keysDef += "Key";
+			keysDef += "(offsetof(DBData,";
+			keysDef += var;
+			keysDef += ") - sizeof(int) - REC_NAME_SIZE, sizeof(data.";
+			keysDef += var;
+			keysDef += "), typeid(data.";
+			keysDef += var;
+			keysDef += "))\n";
 		}
+	}
+}
 
-		// Write the content to the file
-		file6 << headerFl;
+if (FormatDisplay(display, enumsFl, structsFl, vars) != 0)
+return 1;
+sourceFl.replace(sourceFl.find("+++enumMap"), strlen("+++enumMap"), enumMap);
+sourceFl.replace(sourceFl.find("+++Display"), strlen("+++Display"), display);
+headerFl.replace(headerFl.find("+++recKeys"), strlen("+++recKeys"), keys);
+sourceFl.replace(sourceFl.find("+++recKeysDef"), strlen("+++recKeysDef"), keysDef);
+sourceFl.replace(sourceFl.find("+++recKeysDef"), strlen("+++recKeysDef"), keysDef);
 
-		// Close the file
-		file6.close();
+// Open the file in overwrite mode (default is std::ios::out, 
+// which includes std::ios::trunc)
+std::ofstream file6(header, std::ios::out | std::ios::trunc);
+// Check if the file was successfully opened
+if (!file6) {
+	std::cerr << "Error: Could not open the file for writing." << std::endl;
+	return 1;
+}
+else
+std::cerr << "File " << header << "opened for writing." << std::endl;
 
-		std::ofstream file7(source, std::ios::out | std::ios::trunc);
-		// Check if the file was successfully opened
-		if (!file7) {
-			std::cerr << "Error: Could not open the file for writing." << std::endl;
-			return 1;
-		}
+// Write the content to the file
+file6 << headerFl;
 
-		// Write the content to the file
-		file7 << sourceFl;
+// Close the file
+file6.close();
 
-		// Close the file
-		file7.close();
+std::ofstream file7(source, std::ios::out | std::ios::trunc);
+// Check if the file was successfully opened
+if (!file7) {
+	std::cerr << "Error: Could not open the file for writing." << std::endl;
+	return 1;
+}
+else
+std::cerr << "File " << source << "opened for writing." << std::endl;
 
-		//build
-		commandLn = "msbuild ../../SYSCPPCPvcxproj/" + recName + ".vcxproj /p:Configuration=Debug /p:Platform=x64";
-		int res = system(commandLn.c_str());
 
-		// Check if the command executed successfully
-		if (res == 0) {
-			std::cout << "Build succeeded!" << std::endl;
-		}
-		else {
-			std::cerr << "Build failed with error code: " << res << std::endl;
-			return 1;
-		}
-		commandLn = "msbuild ../../SYSCPPCPvcxproj/" + recName + ".vcxproj /p:Configuration=Release /p:Platform=x64";
-		res = system(commandLn.c_str());
+// Write the content to the file
+file7 << sourceFl;
 
-		// Check if the command executed successfully
-		if (res == 0) {
-			std::cout << "Build succeeded!" << std::endl;
-		}
-		else {
-			std::cerr << "Build failed with error code: " << res << std::endl;
-			return 1;
-		}	
+// Close the file
+file7.close();
+
+//build
+#ifdef __linux__		
+commandLn = "make -C ../../SYSCPPCPmake/ -f makefile_" + recName + " debug";
+#elif _WIN32
+commandLn = "msbuild ../../SYSCPPCPvcxproj/" + recName + ".vcxproj /p:Configuration=Debug /p:Platform=x64";
+#else
+std::cout << "Unknown platform" << std::endl;
+#endif
+int res = system(commandLn.c_str());
+
+// Check if the command executed successfully
+if (res == 0) {
+	std::cout << "Build succeeded!" << std::endl;
+}
+else {
+	std::cerr << "Build failed with error code: " << res << std::endl;
+	return 1;
+}
+#ifdef __linux__		
+commandLn = "make -C ../../SYSCPPCPmake/ -f makefile_" + recName + " release";
+#elif _WIN32
+commandLn = "msbuild ../../SYSCPPCPvcxproj/" + recName + ".vcxproj /p:Configuration=Release /p:Platform=x64";
+#else
+std::cout << "Unknown platform" << std::endl;
+#endif
+res = system(commandLn.c_str());
+
+// Check if the command executed successfully
+if (res == 0) {
+	std::cout << "Build succeeded!" << std::endl;
+}
+else {
+	std::cerr << "Build failed with error code: " << res << std::endl;
+	return 1;
+}
 	}
 
 
@@ -861,11 +896,17 @@ void loadHeaderTempl()
 		"        DBData()   \n"
 		"        {   \n"
 		"            RecSize = sizeof(DBData);   \n"
+#ifdef __linux__	
+		"            std::string prettyFunction = __PRETTY_FUNCTION__;  //     \n"
+		"            std::string outerClassName = prettyFunction.substr(0, prettyFunction.find(\"::DBData\"));   \n"
+		"   		 std::strncpy(RecName, outerClassName.c_str(), sizeof(RecName) - 1);\n"
+		"            RecName[sizeof(RecName) - 1] = 0; // Ensure null termination \n"
+#else
 		"            std::string prettyFunction = __FUNCTION__;  //     \n"
 		"            std::string outerClassName = prettyFunction.substr(0, prettyFunction.find(\"::DBData\"));   \n"
 		"            strncpy_s(RecName, sizeof(RecName), outerClassName.c_str(), _TRUNCATE);   \n"
+#endif	
 		"            std::memset(reinterpret_cast<char*>(this) + sizeof(RecSize) + REC_NAME_SIZE, 0, sizeof(DBData) - sizeof(RecSize) - REC_NAME_SIZE);      \n"
-
 		"        }   \n"
 		"        int RecSize;  // size of DBData \n"
 		"       char RecName[REC_NAME_SIZE];  // The name of this class \n"
@@ -910,7 +951,12 @@ void loadSourceTemplate()
 		"//   Update the header file accordingly.\n"
 		"+++recKeysDef   \n"
 		"{                                                                   \n"
+#ifdef __linux__
+		"	std::strncpy(recName, data.RecName, sizeof(recName) - 1); \n"
+		"   recName[sizeof(recName) - 1] = 0; // Ensure null termination \n"
+#else 
 		"	strncpy_s(recName, sizeof(recName), data.RecName, _TRUNCATE);    \n"
+#endif
 		"   data.primaryKey = -1;\n"
 		"}                                                                   \n"
 		"//copy constructor                                                 \n"
@@ -923,9 +969,14 @@ void loadSourceTemplate()
 		"     std::memcpy(&this->data, &other.data, sizeof(DBData));		 \n"
 		"																	 \n"
 		"     // Copy the record name										 \n"
+#ifdef __linux__
+		" 	std::strncpy(this->recName, other.recName, sizeof(this->recName) - 1); \n"
+		"   this->recName[sizeof(this->recName) - 1] = 0; // Ensure null termination \n"
+#else
 		"     strncpy_s(this->recName, sizeof(this->recName), other.recName, _TRUNCATE);\n"
-	    "}\n"
-	    "\n"
+#endif		
+		"}\n"
+		"\n"
 		"char* +++NewRecord::GetDataAddress(void)       \n"
 		"{                                                \n"
 		"	return reinterpret_cast<char *>(&data);       \n"
@@ -990,6 +1041,63 @@ void loadSourceTemplate()
 void loadProjectTempl()
 {
 	projectFl =
+#ifdef __linux__
+		"# Makefile for Linux (Ubuntu) Project Converted from Visual Studio Project\n"
+		"\n"
+		"# Compiler\n"
+		"CXX = g++\n"
+		"\n"
+		"# Compiler flags\n"
+		"CXXFLAGS = -Wall -Wextra -std=c++2a\n"
+		"DEBUGFLAGS = -g -DDEBUG\n"
+		"RELEASEFLAGS = -O2 -DNDEBUG\n"
+		"\n"
+		"# Directories\n\n"
+		"SRCDIR = ../SYSCPPCPSource\n"
+		"INCLUDEDIR = ../SYSCPPCPheaders\n"
+		"DEBUGDIR = ../SYSCPPCPlibs/debug\n"
+		"RELEASEDIR = ../SYSCPPCPlibs/release\n"
+		"\n"
+		"# Source and object files\n"
+		"SRC = $(SRCDIR)/+++ProjectName.cpp\n"
+		"OBJ_DEBUG = $(patsubst $(SRCDIR)/%.cpp,$(DEBUGDIR)/%.o,$(SRC))\n"
+		"OBJ_RELEASE = $(patsubst $(SRCDIR)/%.cpp,$(RELEASEDIR)/%.o,$(SRC))\n"
+		"\n"
+		"# Targets\n"
+		"TARGET_DEBUG = $(DEBUGDIR)/lib+++ProjectNamed.a\n"
+		"TARGET_RELEASE = $(RELEASEDIR)/lib+++ProjectName.a\n"
+		"\n"
+		"# Default target\n"
+		".PHONY: all\n"
+		"default: debug\n"
+		"\n"
+		"# Debug target\n"
+		"debug: $(TARGET_DEBUG)\n"
+		"\n"
+		"$(TARGET_DEBUG): $(OBJ_DEBUG)\n"
+		"	@mkdir -p $(DEBUGDIR)\n"
+		"	ar rcs $@ $^\n"
+		"\n"
+		"$(DEBUGDIR)/%.o: $(SRCDIR)/%.cpp\n"
+		"	@mkdir -p $(DEBUGDIR)\n"
+		"	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -I$(INCLUDEDIR) -c $< -o $@\n"
+		"\n"
+		"# Release target\n"
+		"release: $(TARGET_RELEASE)\n"
+		"\n"
+		"$(TARGET_RELEASE): $(OBJ_RELEASE)\n"
+		"	@mkdir -p $(RELEASEDIR)\n"
+		"	ar rcs $@ $^\n"
+		"\n"
+		"$(RELEASEDIR)/%.o: $(SRCDIR)/%.cpp\n"
+		"	@mkdir -p $(RELEASEDIR)\n"
+		"	$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) -I$(INCLUDEDIR) -c $< -o $@\n"
+		"\n"
+		"# Clean\n"
+		".PHONY: clean\n"
+		"clean:\n"
+		"	find $(DEBUGDIR) $(RELEASEDIR) -type f ! -name 'libSYSCPPCPd.a' ! -name 'libSYSCPPCP.a' -exec rm -f {} +\n";
+#else
 		"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 		"<Project DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">   \n"
 		"    <PropertyGroup>\n"
@@ -1157,6 +1265,7 @@ void loadProjectTempl()
 		"  </ImportGroup>       \n"
 		"</Project>             \n";
 
+#endif
 
 
 }
