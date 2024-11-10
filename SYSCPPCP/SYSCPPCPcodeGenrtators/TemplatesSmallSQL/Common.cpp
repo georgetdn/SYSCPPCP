@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <vector>
 #include <unordered_map>
+#ifdef _WIN32
 #include <conio.h>  // for _getch()
+#endif
 #include <iomanip>  // For std::setprecision
 
 extern std::vector<std::vector<std::string>> vecOfVecs;
@@ -178,17 +180,17 @@ void InitializeDesc(std::vector<std::vector<std::string>>& vecOfDesc)
 std::string LoadHelp(void )
 {
     return
-        "°Only one class(table) can be used in a query\n"
-        "°ORDER BY, GROUP BY, HAVING, LIMIT, UNION are not supported\n"
-        "°No store procedures\n"
-        "°For empty string or character variables (columns) use \" \""
-        "°Floting point variables are displayed in select with only three decimals\n"
-        "°Maximum of five where clauses.\n"
-        "°Except for arrays of char, no arrays can be used in a query\n"
-        "°For enumerations, you have to use the item name, not the associated integer value\n"
-        "°You are not allowed to change the class variables declarations\n"
-        "°Names of classes(tables) and variables(columns) are case-sensitive\n"
-        "°No functions are supported in queries\n"
+        "- Only one class(table) can be used in a query\n"
+        "- ORDER BY, GROUP BY, HAVING, LIMIT, UNION are not supported\n"
+        "- No store procedures\n"
+        "- For empty string or character variables (columns) use \" \""
+        "- Floting point variables are displayed in select with only three decimals\n"
+        "- Maximum of five where clauses.\n"
+        "- Except for arrays of char, no arrays can be used in a query\n"
+        "- For enumerations, you have to use the item name, not the associated integer value\n"
+        "- You are not allowed to change the class variables declarations\n"
+        "- Names of classes(tables) and variables(columns) are case-sensitive\n"
+        "- No functions are supported in queries\n"
         "Queries :\n"
         "cls - clear the screen \n"
         "select dbname from dual\n"
@@ -213,7 +215,11 @@ bool checkSyntax(std::vector<std::string>& tokens)
     std::string command = tokens[0];
     std::transform(command.begin(), command.end(), command.begin(), ::toupper); // Make command case-insensitive
     if (command == "CLS") {
+#ifdef __linux__
+	system("clear");
+#else	
         system("cls");
+#endif
     }
     else if (command == "DESC") {
         if (tokens.size() != 2) {
@@ -274,6 +280,7 @@ bool checkSyntax(std::vector<std::string>& tokens)
             std::cerr << std::endl << "Syntax Error: DELETE expects syntax like 'DELETE FROM class(table) name WHERE condition'." << std::endl << std::endl;
             return false;
         }
+#ifdef _WIN32
         if (tokens.size() == 3)
         {
             std::cout << std::endl << "Are you sure you want to remove all instances of " << tokens[2] << " from the database? " << std::endl;
@@ -291,6 +298,7 @@ bool checkSyntax(std::vector<std::string>& tokens)
                 // You can add the logic for removing the instances here
             }
         }
+#endif		
         std::unordered_map<std::string, std::vector<std::string>> tables;
         std::vector<std::string> columns;
         std::vector<std::vector<std::string>> where;
@@ -364,4 +372,3 @@ bool ValidateWHERE(std::vector<std::string>& tokens,
 	}
     return true;
 }
-

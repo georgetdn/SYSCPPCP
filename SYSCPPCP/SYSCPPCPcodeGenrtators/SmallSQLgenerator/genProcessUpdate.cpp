@@ -7,7 +7,7 @@
 
 bool genProcessUpdate(std::vector<std::string>& prefixes)
 {
-    std::ifstream inputFile("..\\TemplatesSmallSQL\\ProcessUpdate.cpp");
+    std::ifstream inputFile("../TemplatesSmallSQL/ProcessUpdate.cpp");
     if (!inputFile) {
         std::cerr << "Error: Unable to open file for reading." << std::endl;
         return false;
@@ -52,7 +52,7 @@ bool genProcessUpdate(std::vector<std::string>& prefixes)
 
 
     // Write the updated content back to the file
-    std::ofstream outputFile("..\\..\\SmallSQLsource\\ProcessUpdate.cpp");
+    std::ofstream outputFile("../../SmallSQLsource/ProcessUpdate.cpp");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

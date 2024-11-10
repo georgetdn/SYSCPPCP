@@ -7,7 +7,7 @@
 
 bool genProjectFile(std::vector<std::string>& prefixes)
 {
-    std::ifstream inputFile("..\\TemplatesSmallSQL\\SmallSQL.vcxproj");
+    std::ifstream inputFile("../TemplatesSmallSQL/SmallSQL.vcxproj");
     if (!inputFile) {
         std::cerr << "Error: Unable to open file for reading." << std::endl;
         return false;
@@ -19,8 +19,8 @@ bool genProjectFile(std::vector<std::string>& prefixes)
     int i = 1;
     for (const std::string& prefix : prefixes)
     {
-        ItemGroupSource += "    <ClCompile Include=\"..\\SmallSQLsource\\"+ prefix +"Der.cpp\" />\n";
-        ItemGroupHeaders +=  "    <ClInclude Include=\"..\\SmallSQLHeaders\\" + prefix + "Der.h\" />\n";
+        ItemGroupSource += "    <ClCompile Include=\"../SmallSQLsource/"+ prefix +"Der.cpp\" />\n";
+        ItemGroupHeaders +=  "    <ClInclude Include=\"../SmallSQLHeaders/" + prefix + "Der.h\" />\n";
         AdditionalDepDebug += prefix + "d.lib;";
         AdditionalDepRelease += prefix + ".lib;";
     }
@@ -50,7 +50,7 @@ bool genProjectFile(std::vector<std::string>& prefixes)
 
 
     // Write the updated content back to the file
-    std::ofstream outputFile("..\\..\\SYSCPPCPvcxproj\\SmallSQL.vcxproj");
+    std::ofstream outputFile("../../SYSCPPCPvcxproj/SmallSQL.vcxproj");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

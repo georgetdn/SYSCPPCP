@@ -13,7 +13,7 @@ bool isNativeType(std::string type);
 
 bool genCommon(std::vector<std::string>& prefixes)
 {
-    std::ifstream inputFile("..\\TemplatesSmallSQL\\common.cpp");
+    std::ifstream inputFile("../TemplatesSmallSQL/common.cpp");
     if (!inputFile) {
         std::cerr << "Error: Unable to open file for reading." << std::endl;
         return false;
@@ -56,7 +56,7 @@ bool genCommon(std::vector<std::string>& prefixes)
 
         ////////////////////////////////
         InitializeDesc += "\nvecOfDesc.push_back(std::vector<std::string>{\"" + prefix + "\",\n";
-        std::string fileName = "..\\templates\\" + prefix + "Enum.tmpl";
+        std::string fileName = "../templates/" + prefix + "Enum.tmpl";
         std::ifstream inputFile(fileName);
         std::string buffer2;
         if (inputFile) {
@@ -67,7 +67,7 @@ bool genCommon(std::vector<std::string>& prefixes)
             buffer2 += "\n";
             inputFile.close();
         }
-        fileName = "..\\templates\\" + prefix + "Struct.tmpl";
+        fileName = "../templates/" + prefix + "Struct.tmpl";
         inputFile.clear();
         inputFile.open(fileName);
         if (inputFile) {
@@ -79,7 +79,7 @@ bool genCommon(std::vector<std::string>& prefixes)
             inputFile.close();
         }
 
-        fileName = "..\\templates\\" + prefix + "Variables.tmpl";
+        fileName = "../templates/" + prefix + "Variables.tmpl";
         inputFile.clear();
         inputFile.open(fileName);
         if (inputFile) {
@@ -127,7 +127,7 @@ bool genCommon(std::vector<std::string>& prefixes)
                     line += "   // Not supported in queries";
             }
 
-            outputText += "\"" + line + "\\n\"\n";
+            outputText += "\"" + line + "/n\"\n";
            
         }
 
@@ -159,7 +159,7 @@ bool genCommon(std::vector<std::string>& prefixes)
     }
 
     // Write the updated content back to the file
-    std::ofstream outputFile("..\\..\\SmallSQLsource\\common.cpp");
+    std::ofstream outputFile("../../SmallSQLsource/common.cpp");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

@@ -12,7 +12,7 @@ bool isNativeType(std::string type);
 bool isEnum(std::vector<std::vector<std::string>>& enums, std::string type);
 bool isStruct(std::vector<std::vector<std::string>>& structs, std::string type);
 
-std::string directoryPath = "..\\Templates";
+std::string directoryPath = "../Templates";
 std::string extension = ".tmpl";
 std::string baseName;
 std::ifstream fileEnum;

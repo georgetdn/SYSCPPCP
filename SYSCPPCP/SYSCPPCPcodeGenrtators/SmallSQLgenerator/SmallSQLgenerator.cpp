@@ -4,7 +4,11 @@
 #include <set>
 #include <string>
 #include <fstream>
-
+#ifdef __linux__
+#degine COPY cp
+#else 
+#define COPY copy
+#endif
 std::vector<std::vector<std::string>> enums;
 std::vector<std::vector<std::string>> structs;
 std::vector<std::vector<std::string>> variables;
@@ -77,9 +81,6 @@ int main(int argc, char* argv[]) {
 
 	if(! parseTemplates(enums,structs,variables, prefixes))
 		return 1;
-	// copy common files
-	std::cout << "Copying Command.cpp." << std::endl;
-	system("copy ..\\TemplatesSmallSQL\\Common.cpp ..\\..\\SmallSQLsource\\Common.cpp");
 
 	std::cout << std::endl << "Generating SmallSQL.cpp." << std::endl;
 	if (!genSmallSQL(prefixes))
@@ -92,25 +93,25 @@ int main(int argc, char* argv[]) {
 	if (!genProcessDelete(prefixes))
 		return 1;
 	std::cout << "Copying validateDelete.cpp." << std::endl;
-	system("copy ..\\TemplatesSmallSQL\\validateDelete.cpp ..\\..\\SmallSQLsource\\validateDelete.cpp");
+	system("COPY ../TemplatesSmallSQL/validateDelete.cpp ../../SmallSQLsource/validateDelete.cpp");
 
 	std::cout << std::endl << "Generating ProcessInsert.cpp." << std::endl;
 	if (!genProcessInsert(prefixes))
 		return 1;
 	std::cout <<  "Copying validateInsert.cpp." << std::endl;
-	system("copy ..\\TemplatesSmallSQL\\validateInsert.cpp ..\\..\\SmallSQLsource\\validateInsert.cpp");
+	system("COPY ../TemplatesSmallSQL/validateInsert.cpp ../../SmallSQLsource/validateInsert.cpp");
 
 	std::cout << std::endl << "Generating ProcessUpdate.cpp." << std::endl;
 	if (!genProcessUpdate(prefixes))
 		return 1;
 	std::cout <<  "Copying validateUpdate.cpp." << std::endl;
-	system("copy ..\\TemplatesSmallSQL\\validateUpdate.cpp ..\\..\\SmallSQLsource\\validateUpdate.cpp");
+	system("COPY ../TemplatesSmallSQL/validateUpdate.cpp ../../SmallSQLsource/validateUpdate.cpp");
 
 	std::cout << std::endl << "Generating ProcessSelect.cpp." << std::endl;
 	if (!genProcessSelect(prefixes))
 		return 1;
 	std::cout <<  "Copying validateSelect.cpp." << std::endl;
-	system("copy ..\\TemplatesSmallSQL\\validateSelect.cpp ..\\..\\SmallSQLsource\\validateSelect.cpp");
+	system("COPY ../TemplatesSmallSQL/validateSelect.cpp ../../SmallSQLsource/validateSelect.cpp");
 
 	std::cout << std::endl << "Generating classes source files." << std::endl;
 	if (!genSources(prefixes))

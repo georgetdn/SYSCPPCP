@@ -12,7 +12,7 @@ bool isNativeType(std::string type);
 
 bool genSources(std::vector<std::string>& prefixes)
 {
-	std::ifstream inputFile("..\\TemplatesSmallSQL\\derClasses.cpp");
+	std::ifstream inputFile("../TemplatesSmallSQL/derClasses.cpp");
 	if (!inputFile) {
 		std::cerr << "Error: Unable to open file for reading." << std::endl;
 		return false;
@@ -204,67 +204,93 @@ bool genSources(std::vector<std::string>& prefixes)
 					}
 					else if (isNativeType(dataType))
 					{
-						if (dataType == "float" || dataType == "double" || dataType == "long double")
+						//						if (dataType == "float" || dataType == "double" || dataType == "long double")
+						//						{
+
+						if (dataType == "float") {
+							SetValue += Else + " if (col == \"" + value + "\")\n {\n"
+
+								"         std::string integerPart;\n"
+								"         size_t periodPos = val.find('.');\n"
+								"         if (periodPos != std::string::npos) {\n"
+								"             integerPart = val.substr(0, periodPos);\n"
+								"         }\n"
+								"         else\n"
+								"         {\n"
+								"             integerPart = val;\n"
+								"         }\n"
+								"         if (integerPart.length() > 5)\n"
+								"         {\n"
+								"             std::cout << \"Max value for the integral part of " + value + " is 5.\" << std::endl;\n"
+								"             return false;\n"
+								"         }\n"
+								"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+								"         data." + value + " = std::stof(val) ;\n}\n";
+						}
+						else if (dataType == "double") {
+							SetValue += Else + " if (col == \"" + value + "\")\n    {\n"
+								"         std::string integerPart;\n"
+								"         size_t periodPos = val.find('.');\n"
+								"         if (periodPos != std::string::npos) {\n"
+								"             integerPart = val.substr(0, periodPos);\n"
+								"         }\n"
+								"         else\n"
+								"         {\n"
+								"             integerPart = val;\n"
+								"         }\n"
+								"         if (integerPart.length() > 13)\n"
+								"         {\n"
+								"             std::cout << \"Max value for the integral part of " + value + " is 13.\" << std::endl;\n"
+								"             return false;\n"
+								"         }\n"
+								"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+								"         data." + value + " = std::stod(val) ;\n   }\n";
+						}
+						else if (dataType == "long double") {
+							SetValue += Else + " if (col == \"" + value + "\")\n{\n"
+								"         std::string integerPart;\n"
+								"         size_t periodPos = val.find('.');\n"
+								"         if (periodPos != std::string::npos) {\n"
+								"             integerPart = val.substr(0, periodPos);\n"
+								"         }\n"
+								"         else\n"
+								"         {\n"
+								"             integerPart = val;\n"
+								"         }\n"
+								"         if (integerPart.length() > 14)\n"
+								"         {\n"
+								"             std::cout << \"Max value for the integral part of " + value + " is 14.\" << std::endl;\n"
+								"             return false;\n"
+								"         }\n"
+								"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+								"         data." + value + " = std::stold(val) ;\n{\n";
+						}
+						//					}
+						else if (dataType == "int" || dataType == "signed int" || dataType == "unsigned int" ||
+							dataType == "short" || dataType == "short int" || dataType == "signed short" || dataType == "signed short int" ||
+							dataType == "unsigned short" || dataType == "unsigned short int")
 						{
+							SetValue += Else + " if (col == \"" + value + "\")\n{\n"
+								"    if (val.length() > 9) \n"
+								"    {\n    std::cout << \"Max length of " + value + " is 9 digits\" << std::endl;\n"
+								"           return false;\n"
+								"     }\n"
+								"    data." + value + " = std::stoi(val);\n} \n";
+							Else = "else";
+						}
+							
+						else if (	dataType == "signed long int" ||
+							dataType == "signed long" || dataType == "long" || dataType == "long int" || dataType == "unsigned long int" ||
+							dataType == "unsigned long")
+						{
+							SetValue += Else + " if (col == \"" + value + "\")\n{\n"
+								"    if (val.length() > 9) \n"
+								"    {\n    std::cout << \"Max length of " + value + " is 9 digits\" << std::endl;\n"
+								"           return false;\n"
+								"     }\n"
+								"    data." + value + " = std::stol(val);\n} \n";
+							Else = "else";
 
-							if (dataType == "float") {
-								SetValue += Else + " if (col == \"" + value + "\")\n {\n"
-
-									"         std::string integerPart;\n"
-									"         size_t periodPos = val.find('.');\n"
-									"         if (periodPos != std::string::npos) {\n"
-									"             integerPart = val.substr(0, periodPos);\n"
-									"         }\n"
-									"         else\n"
-									"         {\n"
-									"             integerPart = val;\n"
-									"         }\n"
-									"         if (integerPart.length() > 5)\n"
-									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 5.\" << std::endl;\n"
-									"             return false;\n"
-									"         }\n"
-									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
-									"         data." + value + " = std::stof(val) ;\n}\n";
-							}
-							else if (dataType == "double") {
-								SetValue += Else + " if (col == \"" + value + "\")\n    {\n"
-									"         std::string integerPart;\n"
-									"         size_t periodPos = val.find('.');\n"
-									"         if (periodPos != std::string::npos) {\n"
-									"             integerPart = val.substr(0, periodPos);\n"
-									"         }\n"
-									"         else\n"
-									"         {\n"
-									"             integerPart = val;\n"
-									"         }\n"
-									"         if (integerPart.length() > 13)\n"
-									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 13.\" << std::endl;\n"
-									"             return false;\n"
-									"         }\n"
-									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
-								   "         data." + value + " = std::stod(val) ;\n   }\n";
-							}
-							else if (dataType == "long double") {
-								SetValue += Else + " if (col == \"" + value + "\")\n{\n"
-									"         std::string integerPart;\n"
-									"         size_t periodPos = val.find('.');\n"
-									"         if (periodPos != std::string::npos) {\n"
-									"             integerPart = val.substr(0, periodPos);\n"
-									"         }\n"
-									"         else\n"
-									"         {\n"
-									"             integerPart = val;\n"
-									"         }\n"
-									"         if (integerPart.length() > 14)\n"
-									"         {\n"
-									"             std::cout << \"Max value for the integral part of " + value + " is 14.\" << std::endl;\n"
-									"             return false;\n"
-									"         }\n"
-									"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
- 								    "         data." + value + " = std::stold(val) ;\n{\n";
-							}
 						}
 						else
 						{
@@ -273,9 +299,15 @@ bool genSources(std::vector<std::string>& prefixes)
 								"    {\n    std::cout << \"Max length of " + value + " is 10 digits\" << std::endl;\n"
 								"           return false;\n"
 								"     }\n"
-								"    data." + value + " = std::stoi(val);\n} \n";
+								"    data." + value + " = std::stoll(val);\n} \n";
+							Else = "else";
+
+
+
 						}
-						Else = "else";
+
+
+
 					}
 					else
 					{ //check if enum and get size
@@ -344,7 +376,7 @@ bool genSources(std::vector<std::string>& prefixes)
 
 
 		// Write the updated content back to the file
-		std::string outFileName = "..\\..\\SmallSQLsource\\" + prefix + "Der.cpp";
+		std::string outFileName = "../../SmallSQLsource/" + prefix + "Der.cpp";
 		std::ofstream outputFile(outFileName);
 		if (!outputFile) {
 			std::cerr << "Error: Unable to open file for writing." << std::endl;
