@@ -31,11 +31,11 @@ bool genHeaders(std::vector<std::string>& prefixes)
 		while (tmp.find("###prefix") != std::string::npos)
 			tmp.replace(tmp.find("###prefix"), 9, prefix);
 		//write header file
-		std::string filePath = "../../SmallSQLHeaders/" + prefix + "Der.h";
+		std::string filePath = "../../SmallSQLheaders/" + prefix + "Der.h";
 
 		std::ofstream outputFile(filePath);
 		if (!outputFile) {
-			std::cerr << "Error: Unable to open file for writing." << std::endl;
+			std::cerr << "Error: Unable to open file " << filePath << " for writing." << std::endl;
 			return false;
 		}
 
