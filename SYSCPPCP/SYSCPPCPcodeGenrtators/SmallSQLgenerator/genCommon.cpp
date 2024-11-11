@@ -127,8 +127,7 @@ bool genCommon(std::vector<std::string>& prefixes)
                     line += "   // Not supported in queries";
             }
 
-            outputText += "\"" + line + "/n\"\n";
-           
+            outputText += "\"" + line + "\\n\"\n";
         }
 
         // Step 3: Remove the final newline character to handle the last line properly
