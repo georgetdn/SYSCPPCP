@@ -11,7 +11,7 @@
 #define INIT_STR(varName, val) \
     strncpy(varName, val, sizeof(varName) - 1); \
     varName[sizeof(varName) - 1]  = 0;
-#else _WIN32    
+#else   
 #define INIT_STR(varName, val) \
     strncpy_s(varName, sizeof(varName), val, sizeof(varName) - 1);
 #endif
