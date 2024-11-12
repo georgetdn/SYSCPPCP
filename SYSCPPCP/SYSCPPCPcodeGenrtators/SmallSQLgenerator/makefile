@@ -1,66 +1,56 @@
- $(SRCDIR)# Makefile for Linux (Ubuntu)
+# Makefile for Linux (Ubuntu) Project Converted from Visual Studio Project
 
 # Compiler
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Wextra -std=c++2a -Wno-unused-parameter
+CXXFLAGS = -Wall -Wextra -std=c++2a
 DEBUGFLAGS = -g -DDEBUG
 RELEASEFLAGS = -O2 -DNDEBUG
 
 # Directories
-INCLUDES = -I../SmallSQLheaders -I../SYSCPPCPheaders
-SRCDIR = ../SmallSQLSource
-BUILDDIR = ../SmallSQL
-DEBUGDIR = $(BUILDDIR)/debug
-RELEASEDIR = $(BUILDDIR)/release
-LIBDIR_DEBUG = ../SYSCPPCPlibs/debug
-LIBDIR_RELEASE = ../SYSCPPCPlibs/release
+DEBUGDIR = ../debug
+RELEASEDIR = ../release
 
 # Source and object files
-SRC = ###SourceFiles $(SRCDIR)/validateUpdate.cpp \
-  $(SRCDIR)/validateSelect.cpp $(SRCDIR)/validateInsert.cpp $(SRCDIR)/validateDelete.cpp \
-  $(SRCDIR)/SmallSQL.cpp $(SRCDIR)/ProcessUpdate.cpp   $(SRCDIR)/ProcessSelect.cpp \
-  $(SRCDIR)/ProcessInsert.cpp $(SRCDIR)/ProcessDelete.cpp  $(SRCDIR)/Common.cpp
-
-OBJ_DEBUG = $(SRC:$(SRCDIR)/%.cpp=$(DEBUGDIR)/%.o)
-OBJ_RELEASE = $(SRC:$(SRCDIR)/%.cpp=$(RELEASEDIR)/%.o)
+SRC = common.cpp genCommon.cpp genHeaders.cpp genProcessDeletes.cpp \
+      genProcessInsert.cpp genProcessSelect.cpp genProcessUpdate.cpp \
+      genMakeFile.cpp genSmqllSQLcpp.cpp genSourses.cpp \
+      parseTemplates.cpp SmallSQLgenerator.cpp
+OBJ_DEBUG = $(patsubst %.cpp,$(DEBUGDIR)/%.o,$(SRC))
+OBJ_RELEASE = $(patsubst %.cpp,$(RELEASEDIR)/%.o,$(SRC))
 
 # Targets
-TARGET_DEBUG = $(DEBUGDIR)/SmallSQLd
-TARGET_RELEASE = $(RELEASEDIR)/SmallSQL
+TARGET_DEBUG = $(DEBUGDIR)/SmallSQLgenerator
+TARGET_RELEASE = $(RELEASEDIR)/SmallSQLgenerator
 
 # Default target
 .PHONY: all
-all: debug release
+default: debug
 
 # Debug target
-debug: $(DEBUGDIR) $(TARGET_DEBUG)
-
-$(DEBUGDIR):
-	@mkdir -p $@
+debug: $(TARGET_DEBUG)
 
 $(TARGET_DEBUG): $(OBJ_DEBUG)
-	$(CXX) $(OBJ_DEBUG) -L$(LIBDIR_DEBUG) ###LibsDebug -lreadline -lSYSCPPCPd -o $@
+	@mkdir -p $(DEBUGDIR)
+	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -o $@ $^
 
-$(DEBUGDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(INCLUDES) -c $< -o $@
+$(DEBUGDIR)/%.o: %.cpp
+	@mkdir -p $(DEBUGDIR)
+	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -c $< -o $@
 
 # Release target
-release: $(RELEASEDIR) $(TARGET_RELEASE)
-
-$(RELEASEDIR):
-	@mkdir -p $@
+release: $(TARGET_RELEASE)
 
 $(TARGET_RELEASE): $(OBJ_RELEASE)
-	$(CXX) $(OBJ_RELEASE) -L$(LIBDIR_RELEASE) ###LibsRelease -lreadline -lSYSCPPCP -o $@
+	@mkdir -p $(RELEASEDIR)
+	$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) -o $@ $^
 
-$(RELEASEDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(INCLUDES) -c $< -o $@
+$(RELEASEDIR)/%.o: %.cpp
+	@mkdir -p $(RELEASEDIR)
+	$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) -c $< -o $@
 
 # Clean
 .PHONY: clean
 clean:
-	rm -rf $(BUILDDIR)
+	rm -rf $(DEBUGDIR) $(RELEASEDIR)
