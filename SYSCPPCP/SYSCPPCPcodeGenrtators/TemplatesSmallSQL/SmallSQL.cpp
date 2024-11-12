@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#ifdev __linix__
+#ifdef __linix__
 #include <readline/readline.h>
 #include <readline/history.h>
 #endif
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     char * in;
 #endif
 	while (true) {
-#ifdev __linux__
+#ifdef __linux__
         in = readline("SmallSQL> ");
         input = in;
 #elif _WIN32	
