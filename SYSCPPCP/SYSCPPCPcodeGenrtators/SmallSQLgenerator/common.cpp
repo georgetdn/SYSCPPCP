@@ -27,7 +27,6 @@ std::string toUpperCase(const std::string& str) {
 bool isNativeType(std::string type)
 {
 	// Check if one of the native data types is found in dataType
-	bool found = false;
 	for (const auto& nativeType : nativeDataTypes) {
 		if (type.find(nativeType) != std::string::npos) {
 			return true;
