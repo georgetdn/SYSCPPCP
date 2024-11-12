@@ -5,9 +5,9 @@
 #include <string>
 #include <fstream>
 #ifdef __linux__
-#degine COPY cp
+#define COPY "cp"
 #else 
-#define COPY copy
+#define COPY "copy"
 #endif
 std::vector<std::vector<std::string>> enums;
 std::vector<std::vector<std::string>> structs;
@@ -93,25 +93,58 @@ int main(int argc, char* argv[]) {
 	if (!genProcessDelete(prefixes))
 		return 1;
 	std::cout << "Copying validateDelete.cpp." << std::endl;
-	system("COPY ../TemplatesSmallSQL/validateDelete.cpp ../../SmallSQLsource/validateDelete.cpp");
+
+	std::string command = COPY;
+	command += " ../TemplatesSmallSQL/validateDelete.cpp ../../SmallSQLSource/validateDelete.cpp";
+	int res = system(command.c_str());
+	if (res != 0) {
+		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
+	}
+	else {
+		std::cout << "File copied successfully." << std::endl;
+	}
 
 	std::cout << std::endl << "Generating ProcessInsert.cpp." << std::endl;
 	if (!genProcessInsert(prefixes))
 		return 1;
 	std::cout <<  "Copying validateInsert.cpp." << std::endl;
-	system("COPY ../TemplatesSmallSQL/validateInsert.cpp ../../SmallSQLsource/validateInsert.cpp");
+	command = COPY;
+	command += " ../TemplatesSmallSQL/validateInsert.cpp ../../SmallSQLSource/validateInsert.cpp";
+	res = system(command.c_str());
+	if (res != 0) {
+		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
+	}
+	else {
+		std::cout << "File copied successfully." << std::endl;
+	}
 
 	std::cout << std::endl << "Generating ProcessUpdate.cpp." << std::endl;
 	if (!genProcessUpdate(prefixes))
 		return 1;
 	std::cout <<  "Copying validateUpdate.cpp." << std::endl;
-	system("COPY ../TemplatesSmallSQL/validateUpdate.cpp ../../SmallSQLsource/validateUpdate.cpp");
+	command = COPY;
+	command += " ../TemplatesSmallSQL/validateUpdate.cpp ../../SmallSQLSource/validateUpdate.cpp";
+	res = system(command.c_str());
+	if (res != 0) {
+		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
+	}
+	else {
+		std::cout << "File copied successfully." << std::endl;
+	}
 
 	std::cout << std::endl << "Generating ProcessSelect.cpp." << std::endl;
 	if (!genProcessSelect(prefixes))
 		return 1;
 	std::cout <<  "Copying validateSelect.cpp." << std::endl;
-	system("COPY ../TemplatesSmallSQL/validateSelect.cpp ../../SmallSQLsource/validateSelect.cpp");
+	command = COPY;
+	command += " ../TemplatesSmallSQL/validateSelect.cpp ../../SmallSQLSource/validateSelect.cpp";
+	res = system(command.c_str());
+	if (res != 0) {
+		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
+	}
+	else {
+		std::cout << "File copied successfully." << std::endl;
+	}
 
 	std::cout << std::endl << "Generating classes source files." << std::endl;
 	if (!genSources(prefixes))
@@ -120,7 +153,19 @@ int main(int argc, char* argv[]) {
 	std::cout << std::endl << "Generating common.cpp." << std::endl;
 	if (!genCommon(prefixes))
 		return 1;
-
+#ifdef __linux__
+	std::cout << std::endl << "Generating SmallSQL makefile." << std::endl;
+	if (!genProjectFile(prefixes))
+		return 1;
+	//build
+	int ret = system("make -C ../../SYSCPPCPmake -f makefile_SQL debug release");
+	if (ret == 0) {
+		std::cout << "Makefile executed successfully." << std::endl;
+	}
+	else {
+		std::cerr << "Error executing Makefile. Return code: " << ret << std::endl;
+	}
+#elif _WIN32
 	std::cout << std::endl << "Generating SmallSQL.vcxproj." << std::endl;
 	if (!genProjectFile(prefixes))
 		return 1;
@@ -129,6 +174,8 @@ int main(int argc, char* argv[]) {
 	system(cmmandLn.c_str());
 	cmmandLn = "msbuild ../../SYSCPPCPvcxproj/SmallSQL.vcxproj /p:Configuration=Release /p:Platform=x64";
 	system(cmmandLn.c_str());
-
+#else
+	std::cout << "Unknown platform " << std::endl;
+#endif
 	return 0;
 }

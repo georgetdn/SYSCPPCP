@@ -193,7 +193,7 @@ bool genSources(std::vector<std::string>& prefixes)
 					{
 						if (dataType.find("[") != std::string::npos)
 						{
-							SetValue += Else + " if (col == \"" + value + "\")\n     INIT_STR(data." + value + ", val.c_str())\n";
+							SetValue += Else + " if (col == \"" + value + "\")  {\n     INIT_STR(data." + value + ", val.c_str())\n}\n";
 							Else = "else";
 						}
 						else
@@ -224,7 +224,7 @@ bool genSources(std::vector<std::string>& prefixes)
 								"             std::cout << \"Max value for the integral part of " + value + " is 5.\" << std::endl;\n"
 								"             return false;\n"
 								"         }\n"
-								"         val = integerPart +\".\" + val.substr(periodPos + 1, 5);\n"
+								"         val = integerPart +\".\" + val.substr(periodPos + 1, 3);\n"
 								"         data." + value + " = std::stof(val) ;\n}\n";
 						}
 						else if (dataType == "double") {
@@ -312,7 +312,7 @@ bool genSources(std::vector<std::string>& prefixes)
 					else
 					{ //check if enum and get size
 						bool found = false;
-						size_t i = 0;
+
 						for (const auto& row : enums) {
 							if (row[0] != prefix)
 								continue;
@@ -376,7 +376,7 @@ bool genSources(std::vector<std::string>& prefixes)
 
 
 		// Write the updated content back to the file
-		std::string outFileName = "../../SmallSQLsource/" + prefix + "Der.cpp";
+		std::string outFileName = "../../SmallSQLSource/" + prefix + "Der.cpp";
 		std::ofstream outputFile(outFileName);
 		if (!outputFile) {
 			std::cerr << "Error: Unable to open file for writing." << std::endl;

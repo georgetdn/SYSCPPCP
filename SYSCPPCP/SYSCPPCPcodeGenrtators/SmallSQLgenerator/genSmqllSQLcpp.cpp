@@ -39,7 +39,7 @@ bool genSmallSQL(std::vector<std::string> &prefixes)
     }
 
     // Write the updated content back to the file
-    std::ofstream outputFile("../../SmallSQLsource/SmallSQL.cpp");
+    std::ofstream outputFile("../../SmallSQLSource/SmallSQL.cpp");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

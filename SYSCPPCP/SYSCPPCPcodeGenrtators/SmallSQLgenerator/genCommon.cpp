@@ -158,7 +158,7 @@ bool genCommon(std::vector<std::string>& prefixes)
     }
 
     // Write the updated content back to the file
-    std::ofstream outputFile("../../SmallSQLsource/common.cpp");
+    std::ofstream outputFile("../../SmallSQLSource/common.cpp");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

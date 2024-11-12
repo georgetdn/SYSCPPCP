@@ -19,7 +19,7 @@ bool genProjectFile(std::vector<std::string>& prefixes)
     int i = 1;
     for (const std::string& prefix : prefixes)
     {
-        ItemGroupSource += "    <ClCompile Include=\"../SmallSQLsource/"+ prefix +"Der.cpp\" />\n";
+        ItemGroupSource += "    <ClCompile Include=\"../SmallSQLSource/"+ prefix +"Der.cpp\" />\n";
         ItemGroupHeaders +=  "    <ClInclude Include=\"../SmallSQLHeaders/" + prefix + "Der.h\" />\n";
         AdditionalDepDebug += prefix + "d.lib;";
         AdditionalDepRelease += prefix + ".lib;";

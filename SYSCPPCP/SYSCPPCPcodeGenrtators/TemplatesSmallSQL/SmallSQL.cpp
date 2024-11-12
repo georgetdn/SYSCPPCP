@@ -3,8 +3,10 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-
-
+#ifdev __linix__
+#include <readline/readline.h>
+#include <readline/history.h>
+#endif
 #include "Database.h"
 #include "Record.h"
 ###includes
@@ -41,9 +43,19 @@ int main(int argc, char* argv[])
 	InitializeVector(vecOfVecs);
 	InitializeDesc(vecOfDesc);
 	Record::db->outFile.seekp(0, std::ios::beg);
+#ifdef __linux__
+    char * in;
+#endif
 	while (true) {
+#ifdev __linux__
+        in = readline("SmallSQL> ");
+        input = in;
+#elif _WIN32	
 		std::cout << "SmallSQL> ";
 		std::getline(std::cin, input);
+#else
+		std::cout "Unsupported platform." << std::endl;
+#endif
 
 		if (input.empty()) {
 			continue;
@@ -51,7 +63,9 @@ int main(int argc, char* argv[])
 		if (toUpperCase(input) == "EXIT" || toUpperCase(input) == "QUIT" || toUpperCase(input) == "BYE") {
 			break;
 		}
-
+#ifdef __linux__ 
+        add_history(in);
+#endif
 		std::vector<std::string> tokens = split(input);
 
 		if (checkSyntax(tokens)) {
