@@ -1048,7 +1048,7 @@ void loadProjectTempl()
 		"CXX = g++\n"
 		"\n"
 		"# Compiler flags\n"
-		"CXXFLAGS = -Wall -Wextra -std=c++2a\n"
+		"CXXFLAGS = -Wall -Wextra -std=c++2a  -Wno-unused-parameter -Wno-unused-variable    \n"
 		"DEBUGFLAGS = -g -DDEBUG\n"
 		"RELEASEFLAGS = -O2 -DNDEBUG\n"
 		"\n"
