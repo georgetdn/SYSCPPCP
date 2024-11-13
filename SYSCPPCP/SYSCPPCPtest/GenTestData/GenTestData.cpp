@@ -25,11 +25,8 @@ std::streampos reco3;
 
 int main() {
 
-#ifdef __linux__
 	Database db("../../../../syscppcp.dat");
-#else
-	Database db("..\\..\\syscppcp.dat");
-#endif
+
 	if (!db.IsOpen())
 	{
 		std::cout << "DB not opened" << std::endl;
