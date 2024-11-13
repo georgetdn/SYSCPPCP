@@ -8,8 +8,12 @@
 #include "Family.h"
 #include "Cat.h"
 #include "Dog.h"
-
 #include <string>
+#ifdef __linux__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
 void CreateTestData1(void);
 void CreateData2(void);
 void CreateData3(void);
