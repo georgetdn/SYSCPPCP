@@ -32,20 +32,14 @@ int main() {
 		std::cout << "DB not opened" << std::endl;
 		return 1;
 	}
+	std::cout << "Populating the database 'syscppcp.dat'  " <<  std::endl;
 	CreateTestData1();
 	CreateData2();
 	CreateData3();
 	CreateTheSimpsonsFamily();
 
-	Item rec;
-	rec.data.Bin = 10;
-	rec.data.ItemID = 5;
-	INIT_STR(rec.data.Name, "New Item")
-		rec.data.price = 12.35;
-	rec.data.category = Category::Beverages;
-	rec.data.UM = UnitsOfMeasure::Liter;
-	rec.Insert();
-	rec.Dump();
+	std::cout << "Record count  " << db.GetCount() << std::endl;
+
 
 
 	/*
@@ -82,7 +76,7 @@ int main() {
 
 	std::cout << "Record count  " << db.GetCount() << std::endl;
 	//RecordOne rec;
-	db.Dump();
+
 	RecordOne rec;
 	//Insert a record in the database
 	//Use INIT_STR instead of strncpy_s
@@ -92,7 +86,7 @@ int main() {
 		rec.Address1Key.value = "123 park ave";
 	rec.Address1Key.comp = Comp::Equal;
 	rec.Seek(&rec.Address1Key, nullptr);
-	rec.Dump();
+
 
 	if(rec.IsSaved())
 		std::cout << "Record is saved" << std::endl;
@@ -182,7 +176,6 @@ int main() {
 		results.StateKey.value = "NY";
 		results.ZipKey.comp = Comp::Equal;
 		results.ZipKey.value = "12345";
-		results.Dump();
 
 		if (results.Seek( nullptr) == OpResult::True)
 		{
@@ -650,7 +643,6 @@ void CreateData3()
 	rec1.data.category = Category::Beverages;
 	rec1.data.UM = UnitsOfMeasure::Liter;
 	rec1.Insert();
-	rec1.Dump();
 
 	// Test Data 2
 	Item rec2;
@@ -661,7 +653,6 @@ void CreateData3()
 	rec2.data.category = Category::Produce;
 	rec2.data.UM = UnitsOfMeasure::Kilogram;
 	rec2.Insert();
-	rec2.Dump();
 
 	// Test Data 3
 	Item rec3;
@@ -672,7 +663,6 @@ void CreateData3()
 	rec3.data.category = Category::Poultry;
 	rec3.data.UM = UnitsOfMeasure::Pound;
 	rec3.Insert();
-	rec3.Dump();
 
 	// Test Data 4
 	Item rec4;
@@ -683,7 +673,7 @@ void CreateData3()
 	rec4.data.category = Category::Bakery;
 	rec4.data.UM = UnitsOfMeasure::Gram;
 	rec4.Insert();
-	rec4.Dump();
+
 
 	// Test Data 5
 	Item rec5;
@@ -694,7 +684,6 @@ void CreateData3()
 	rec5.data.category = Category::Dairy;
 	rec5.data.UM = UnitsOfMeasure::Liter;
 	rec5.Insert();
-	rec5.Dump();
 
 	// Test Data 6
 	Item rec6;
@@ -705,7 +694,6 @@ void CreateData3()
 	rec6.data.category = Category::Meet;
 	rec6.data.UM = UnitsOfMeasure::Kilogram;
 	rec6.Insert();
-	rec6.Dump();
 
 	// Test Data 7
 	Item rec7;
@@ -716,7 +704,6 @@ void CreateData3()
 	rec7.data.category = Category::Dairy;
 	rec7.data.UM = UnitsOfMeasure::Pound;
 	rec7.Insert();
-	rec7.Dump();
 
 	// Test Data 8
 	Item rec8;
@@ -727,7 +714,6 @@ void CreateData3()
 	rec8.data.category = Category::Seafood;
 	rec8.data.UM = UnitsOfMeasure::Pound;
 	rec8.Insert();
-	rec8.Dump();
 
 	// Test Data 9
 	Item rec9;
@@ -738,7 +724,6 @@ void CreateData3()
 	rec9.data.category = Category::Alcohol;
 	rec9.data.UM = UnitsOfMeasure::Liter;
 	rec9.Insert();
-	rec9.Dump();
 
 	// Test Data 10
 	Item rec10;
@@ -749,7 +734,6 @@ void CreateData3()
 	rec10.data.category = Category::Snacks;
 	rec10.data.UM = UnitsOfMeasure::Gram;
 	rec10.Insert();
-	rec10.Dump();
 	// Test Data 11
 	Item rec11;
 	rec11.data.Bin = 15;
@@ -759,7 +743,6 @@ void CreateData3()
 	rec11.data.category = Category::Beverages;
 	rec11.data.UM = UnitsOfMeasure::Liter;
 	rec11.Insert();
-	rec11.Dump();
 
 	// Test Data 12
 	Item rec12;
@@ -770,7 +753,6 @@ void CreateData3()
 	rec12.data.category = Category::Seafood;
 	rec12.data.UM = UnitsOfMeasure::Pound;
 	rec12.Insert();
-	rec12.Dump();
 
 	// Test Data 13
 	Item rec13;
@@ -781,7 +763,6 @@ void CreateData3()
 	rec13.data.category = Category::Bakery;
 	rec13.data.UM = UnitsOfMeasure::Gram;
 	rec13.Insert();
-	rec13.Dump();
 
 	// Test Data 14
 	Item rec14;
@@ -792,7 +773,6 @@ void CreateData3()
 	rec14.data.category = Category::Dairy;
 	rec14.data.UM = UnitsOfMeasure::Kilogram;
 	rec14.Insert();
-	rec14.Dump();
 
 	// Test Data 15
 	Item rec15;
@@ -803,7 +783,6 @@ void CreateData3()
 	rec15.data.category = Category::Meet;
 	rec15.data.UM = UnitsOfMeasure::Kilogram;
 	rec15.Insert();
-	rec15.Dump();
 
 	// Test Data 16
 	Item rec16;
@@ -814,7 +793,6 @@ void CreateData3()
 	rec16.data.category = Category::Dairy;
 	rec16.data.UM = UnitsOfMeasure::Ounce;
 	rec16.Insert();
-	rec16.Dump();
 
 	// Test Data 17
 	Item rec17;
@@ -825,7 +803,6 @@ void CreateData3()
 	rec17.data.category = Category::Groceries;
 	rec17.data.UM = UnitsOfMeasure::Pound;
 	rec17.Insert();
-	rec17.Dump();
 
 	// Test Data 18
 	Item rec18;
@@ -836,7 +813,6 @@ void CreateData3()
 	rec18.data.category = Category::Groceries;
 	rec18.data.UM = UnitsOfMeasure::SquareFoot;
 	rec18.Insert();
-	rec18.Dump();
 
 	// Test Data 19
 	Item rec19;
@@ -847,7 +823,6 @@ void CreateData3()
 	rec19.data.category = Category::Produce;
 	rec19.data.UM = UnitsOfMeasure::Pound;
 	rec19.Insert();
-	rec19.Dump();
 
 	// Test Data 20
 	Item rec20;
@@ -858,7 +833,6 @@ void CreateData3()
 	rec20.data.category = Category::Snacks;
 	rec20.data.UM = UnitsOfMeasure::Gram;
 	rec20.Insert();
-	rec20.Dump();
 
 	// Test Data 21
 	Item rec21;
@@ -869,7 +843,6 @@ void CreateData3()
 	rec21.data.category = Category::Beverages;
 	rec21.data.UM = UnitsOfMeasure::Quart;
 	rec21.Insert();
-	rec21.Dump();
 
 	// Test Data 22
 	Item rec22;
@@ -880,7 +853,6 @@ void CreateData3()
 	rec22.data.category = Category::Poultry;
 	rec22.data.UM = UnitsOfMeasure::Pound;
 	rec22.Insert();
-	rec22.Dump();
 
 	// Test Data 23
 	Item rec23;
@@ -891,7 +863,6 @@ void CreateData3()
 	rec23.data.category = Category::Bakery;
 	rec23.data.UM = UnitsOfMeasure::Gram;
 	rec23.Insert();
-	rec23.Dump();
 
 	// Test Data 24
 	Item rec24;
@@ -902,7 +873,6 @@ void CreateData3()
 	rec24.data.category = Category::Alcohol;
 	rec24.data.UM = UnitsOfMeasure::Gallon;
 	rec24.Insert();
-	rec24.Dump();
 
 	// Test Data 25
 	Item rec25;
@@ -913,7 +883,6 @@ void CreateData3()
 	rec25.data.category = Category::Groceries;
 	rec25.data.UM = UnitsOfMeasure::Pound;
 	rec25.Insert();
-	rec25.Dump();
 
 	// Test Data 26
 	Item rec26;
@@ -924,7 +893,6 @@ void CreateData3()
 	rec26.data.category = Category::Bakery;
 	rec26.data.UM = UnitsOfMeasure::Gram;
 	rec26.Insert();
-	rec26.Dump();
 
 	// Test Data 27
 	Item rec27;
@@ -935,7 +903,6 @@ void CreateData3()
 	rec27.data.category = Category::Produce;
 	rec27.data.UM = UnitsOfMeasure::Kilogram;
 	rec27.Insert();
-	rec27.Dump();
 
 	// Test Data 28
 	Item rec28;
@@ -946,7 +913,6 @@ void CreateData3()
 	rec28.data.category = Category::Alcohol;
 	rec28.data.UM = UnitsOfMeasure::Quart;
 	rec28.Insert();
-	rec28.Dump();
 
 	// Test Data 29
 	Item rec29;
@@ -957,7 +923,6 @@ void CreateData3()
 	rec29.data.category = Category::Snacks;
 	rec29.data.UM = UnitsOfMeasure::Gram;
 	rec29.Insert();
-	rec29.Dump();
 
 	// Test Data 30
 	Item rec30;
@@ -968,7 +933,6 @@ void CreateData3()
 	rec30.data.category = Category::Produce;
 	rec30.data.UM = UnitsOfMeasure::Kilogram;
 	rec30.Insert();
-	rec30.Dump();
 }
 
 void CreateTheSimpsonsFamily()
