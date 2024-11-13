@@ -18,8 +18,8 @@ LIBDIR_DEBUG = ../SYSCPPCPlibs/debug
 LIBDIR_RELEASE = ../SYSCPPCPlibs/release
 
 # Source and object files
-SRC = ###SourceFiles $(SRCDIR)/validateUpdate.cpp \
-  $(SRCDIR)/validateSelect.cpp $(SRCDIR)/validateInsert.cpp $(SRCDIR)/validateDelete.cpp \
+SRC = ###SourceFiles $(SRCDIR)/ValidateUpdate.cpp \
+  $(SRCDIR)/ValidateSelect.cpp $(SRCDIR)/ValidateInsert.cpp $(SRCDIR)/ValidateDelete.cpp \
   $(SRCDIR)/SmallSQL.cpp $(SRCDIR)/ProcessUpdate.cpp   $(SRCDIR)/ProcessSelect.cpp \
   $(SRCDIR)/ProcessInsert.cpp $(SRCDIR)/ProcessDelete.cpp  $(SRCDIR)/Common.cpp
 

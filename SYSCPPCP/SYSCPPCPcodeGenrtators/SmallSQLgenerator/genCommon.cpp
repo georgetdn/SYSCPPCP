@@ -13,7 +13,7 @@ bool isNativeType(std::string type);
 
 bool genCommon(std::vector<std::string>& prefixes)
 {
-    std::ifstream inputFile("../TemplatesSmallSQL/common.cpp");
+    std::ifstream inputFile("../TemplatesSmallSQL/Common.cpp");
     if (!inputFile) {
         std::cerr << "Error: Unable to open file for reading." << std::endl;
         return false;
@@ -158,7 +158,7 @@ bool genCommon(std::vector<std::string>& prefixes)
     }
 
     // Write the updated content back to the file
-    std::ofstream outputFile("../../SmallSQLSource/common.cpp");
+    std::ofstream outputFile("../../SmallSQLSource/Common.cpp");
     if (!outputFile) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return false;

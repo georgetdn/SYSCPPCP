@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#ifdef __linix__
+#ifdef __linux__
 #include <readline/readline.h>
 #include <readline/history.h>
 #endif
