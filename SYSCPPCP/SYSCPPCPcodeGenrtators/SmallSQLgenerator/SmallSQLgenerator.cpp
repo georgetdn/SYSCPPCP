@@ -4,7 +4,8 @@
 #include <set>
 #include <string>
 #include <fstream>
-#ifdef __linux__
+
+#ifdef __linux__ 
 #define COPY "cp"
 #else 
 #define COPY "copy"
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "Copying validateDelete.cpp." << std::endl;
 
 	std::string command = COPY;
-	command += " ../TemplatesSmallSQL/validateDelete.cpp ../../SmallSQLSource/validateDelete.cpp";
+	command += " ../TemplatesSmallSQL/ValidateDelete.cpp ../../SmallSQLSource/ValidateDelete.cpp";
 	int res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	std::cout <<  "Copying validateInsert.cpp." << std::endl;
 	command = COPY;
-	command += " ../TemplatesSmallSQL/validateInsert.cpp ../../SmallSQLSource/validateInsert.cpp";
+	command += " ../TemplatesSmallSQL/ValidateInsert.cpp ../../SmallSQLSource/ValidateInsert.cpp";
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
@@ -117,13 +118,12 @@ int main(int argc, char* argv[]) {
 	else {
 		std::cout << "File copied successfully." << std::endl;
 	}
-
 	std::cout << std::endl << "Generating ProcessUpdate.cpp." << std::endl;
 	if (!genProcessUpdate(prefixes))
 		return 1;
 	std::cout <<  "Copying validateUpdate.cpp." << std::endl;
 	command = COPY;
-	command += " ../TemplatesSmallSQL/validateUpdate.cpp ../../SmallSQLSource/validateUpdate.cpp";
+	command += " ../TemplatesSmallSQL/ValidateUpdate.cpp ../../SmallSQLSource/ValidateUpdate.cpp";
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	std::cout <<  "Copying validateSelect.cpp." << std::endl;
 	command = COPY;
-	command += " ../TemplatesSmallSQL/validateSelect.cpp ../../SmallSQLSource/validateSelect.cpp";
+	command += " ../TemplatesSmallSQL/ValidateSelect.cpp ../../SmallSQLSource/ValidateSelect.cpp";
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
