@@ -4,7 +4,7 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Wextra -std=c++2a -Wno-unused-parameter
+CXXFLAGS = -Wall -Wextra -std=c++2a -Wno-unused-parameter -Wno-unused-variable
 DEBUGFLAGS = -g -DDEBUG
 RELEASEFLAGS = -O2 -DNDEBUG
 
