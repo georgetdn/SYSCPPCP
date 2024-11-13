@@ -127,9 +127,8 @@ int main(int argc, char* argv[]) {
 #ifdef __linux__
 	command = "cp ../TemplatesSmallSQL/ValidateUpdate.cpp ../../SmallSQLSource/ValidateUpdate.cpp";
 #else
-	command = "copy ..\\TemplatesSmallSQL\\ValidateUpdate.cpp ..\\..\\SmallSQLSource\\ValidateUpdate.cpp\"";
+	command = "\"copy ..\\TemplatesSmallSQL\\ValidateUpdate.cpp ..\\..\\SmallSQLSource\\ValidateUpdate.cpp\"";
 #endif
-	command += " ../TemplatesSmallSQL/ValidateUpdate.cpp ../../SmallSQLSource/ValidateUpdate.cpp";
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
