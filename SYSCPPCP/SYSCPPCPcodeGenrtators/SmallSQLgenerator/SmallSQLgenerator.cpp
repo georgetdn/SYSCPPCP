@@ -5,11 +5,6 @@
 #include <string>
 #include <fstream>
 
-#ifdef __linux__ 
-#define COPY "cp"
-#else 
-#define COPY "copy"
-#endif
 std::vector<std::vector<std::string>> enums;
 std::vector<std::vector<std::string>> structs;
 std::vector<std::vector<std::string>> variables;
@@ -95,8 +90,12 @@ int main(int argc, char* argv[]) {
 		return 1;
 	std::cout << "Copying validateDelete.cpp." << std::endl;
 
-	std::string command = COPY;
-	command += " ../TemplatesSmallSQL/ValidateDelete.cpp ../../SmallSQLSource/ValidateDelete.cpp";
+	std::string command;
+#ifdef __linux__
+	command = "cp ../TemplatesSmallSQL/ValidateDelete.cpp ../../SmallSQLSource/ValidateDelete.cpp";
+#else
+	command = "copy ..\\TemplatesSmallSQL\\ValidateDelete.cpp ..\\..\\SmallSQLSource\\ValidateDelete.cpp\"";
+#endif
 	int res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
@@ -109,8 +108,11 @@ int main(int argc, char* argv[]) {
 	if (!genProcessInsert(prefixes))
 		return 1;
 	std::cout <<  "Copying validateInsert.cpp." << std::endl;
-	command = COPY;
-	command += " ../TemplatesSmallSQL/ValidateInsert.cpp ../../SmallSQLSource/ValidateInsert.cpp";
+#ifdef __linux__
+	command = "cp ../TemplatesSmallSQL/ValidateInsert.cpp ../../SmallSQLSource/ValidateInsert.cpp";
+#else
+	command = "copy ..\\TemplatesSmallSQL\\ValidateInsert.cpp ..\\..\\SmallSQLSource\\ValidateInsert.cpp\"";
+#endif
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
@@ -122,7 +124,11 @@ int main(int argc, char* argv[]) {
 	if (!genProcessUpdate(prefixes))
 		return 1;
 	std::cout <<  "Copying validateUpdate.cpp." << std::endl;
-	command = COPY;
+#ifdef __linux__
+	command = "cp ../TemplatesSmallSQL/ValidateUpdate.cpp ../../SmallSQLSource/ValidateUpdate.cpp";
+#else
+	command = "copy ..\\TemplatesSmallSQL\\ValidateUpdate.cpp ..\\..\\SmallSQLSource\\ValidateUpdate.cpp\"";
+#endif
 	command += " ../TemplatesSmallSQL/ValidateUpdate.cpp ../../SmallSQLSource/ValidateUpdate.cpp";
 	res = system(command.c_str());
 	if (res != 0) {
@@ -136,8 +142,11 @@ int main(int argc, char* argv[]) {
 	if (!genProcessSelect(prefixes))
 		return 1;
 	std::cout <<  "Copying validateSelect.cpp." << std::endl;
-	command = COPY;
-	command += " ../TemplatesSmallSQL/ValidateSelect.cpp ../../SmallSQLSource/ValidateSelect.cpp";
+#ifdef __linux__
+	command = "cp ../TemplatesSmallSQL/ValidateSelect.cpp ../../SmallSQLSource/ValidateSelect.cpp";
+#else
+	command = "copy ..\\TemplatesSmallSQL\\ValidateSelect.cpp ..\\..\\SmallSQLSource\\ValidateSelect.cpp\"";
+#endif
 	res = system(command.c_str());
 	if (res != 0) {
 		std::cerr << "Failed to copy the file. Error code: " << res << std::endl;
