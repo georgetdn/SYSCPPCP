@@ -4,8 +4,9 @@ Store C++ class data in a file and manipulate it programmatically or using Small
 ## Requirements:
 Linux or Windows 10, 11 and Visual Studio Community 2022 (64-bit) - Current Version 17.11.5  (VS Code is not supported).
 ## Installing  
-To install and build the Windows framework and SmallSQL application clone the project, go to SYSCPPCP directory in a Command Prompt or Power Shell window and execute the build.bat batch file. (./build for PS). The build will take about five minutes.  For Linux execute build.sh. The sctipt first will install GNU Readline library requiring root privileges.
-This process will build a framework based on the sample templates from _\SYSCPPCP\SYSCPPCPcodeGenrtators\templates_ .
+To install and build the Windows framework and SmallSQL application clone the project, go to SYSCPPCP directory in a Command Prompt or Power Shell window and execute the build.bat batch file. (./build for PS). The build will take about five minutes.  For Linux execute build.sh. The sctipt first will install GNU Readline library requiring root privileges.  
+  
+The build process will build a framework based on the sample templates from _\SYSCPPCP\SYSCPPCPcodeGenrtators\templates_ .
 When you develop your application you will create a set of templates defining the classes in your application, build the framework and add code specific to your application.  More on this later.
   
 ## Getting familiar with the framework ##  
