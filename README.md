@@ -4,7 +4,7 @@ Store C++ class data in a file and manipulate it programmatically or using Small
 ## Requirements: ##
 Linux or Windows 10, 11 and Visual Studio Community 2022 (64-bit) - Current Version 17.11.5  (VS Code is not supported).
 ## Note ##
-This version of SYSCPPCP can store only native types to the database.  For a version handling std::string, std::vecotr and std::map send an email to george@tdnsys.com  
+This version of SYSCPPCP can store only native types to the database.  For a version handling std::string, std::vecotr and std::map send an email to contact@tdnsys.com  
 ## Installing ## 
 To install and build the Windows framework and SmallSQL application clone the project, go to SYSCPPCP directory in a Command Prompt or Power Shell window and execute the build.bat batch file. (./build for PS). The build will take about five minutes.  For Linux execute build.sh in a Bash shell. The sctipt first will install GNU Readline library requiring sudo.  
   
@@ -94,7 +94,7 @@ SmallSQL> __update Customer set name.First = "Milton",  name.Last = "Gimbles" wh
 SmallSQL> __delete from Customer where type = OneTime__  
 To exit type __bye__ or __exit__
 __Note__: In your applications, as long as you don't change the generated code, you can declare other variables and functions.  The newly declared variables will not be stored in the database.
-If you need more help read the tutorials.  You can also email me at george@tdnsys.com
+If you need more help read the tutorials.  You can also email me at contact@tdnsys.com
 
 
  
