@@ -1,9 +1,11 @@
 # SYSCPPCP #
 ## Simple Yet Sophisticated C++ Class Persistence or SYSCPPCP ##  
 Store C++ class data in a file and manipulate it programmatically or using SmallSQL(included)  
-## Requirements:
+## Requirements: ##
 Linux or Windows 10, 11 and Visual Studio Community 2022 (64-bit) - Current Version 17.11.5  (VS Code is not supported).
-## Installing  
+## Note ##
+This version of SYSCPPCP can store only native types to the database.  For a version handling std::string, std::vecotr and std::map send an email to george@tdnsys.com  
+## Installing ## 
 To install and build the Windows framework and SmallSQL application clone the project, go to SYSCPPCP directory in a Command Prompt or Power Shell window and execute the build.bat batch file. (./build for PS). The build will take about five minutes.  For Linux execute build.sh in a Bash shell. The sctipt first will install GNU Readline library requiring sudo.  
   
 The build process will build a framework based on the sample templates from _\SYSCPPCP\SYSCPPCPcodeGenrtators\templates_ .
