@@ -75,7 +75,7 @@ Notice that the column names are variable names as you would use them in a progr
 name is declared as a structure  
 ```
 Name {
-      char  First[20; 
+      char  First[20]; 
       char Last [20];
     };
 ```
