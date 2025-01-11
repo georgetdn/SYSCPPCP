@@ -15,7 +15,7 @@
 #define INIT_STR(varName, val) \
     strncpy_s(varName, sizeof(varName), val, sizeof(varName) - 1);
 #endif
-
+ 
 enum class Comp
 {
     Equal,
